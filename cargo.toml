@@ -1,4 +1,4 @@
 [workspace]
-members = [ "anthropic-sdk"]
+members = [ "anthropic-sdk", "examples/list-models"]
 default-members = ["anthropic-sdk"]
 resolver = "2"
