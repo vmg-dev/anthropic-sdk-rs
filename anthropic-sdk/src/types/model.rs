@@ -8,6 +8,17 @@ use thiserror::Error;
 use time::serde::rfc3339;
 use time::OffsetDateTime;
 
+/// Error types for the Models API
+#[derive(Debug, Error)]
+pub enum ModelError {
+    #[error("Invalid pagination parameters")]
+    InvalidPagination,
+    #[error("Invalid limit value: {0}")]
+    InvalidLimit(u16),
+    #[error("API request failed: {0}")]
+    RequestFailed(String),
+}
+
 #[async_trait]
 pub trait ModelClient {
     async fn list_models<'a>(
@@ -86,15 +97,4 @@ impl ListModelsParams {
         self.limit = Some(limit.min(1000));
         self
     }
-}
-
-/// Error types for the Models API
-#[derive(Debug, Error)]
-pub enum ModelError {
-    #[error("Invalid pagination parameters")]
-    InvalidPagination,
-    #[error("Invalid limit value: {0}")]
-    InvalidLimit(u16),
-    #[error("API request failed: {0}")]
-    RequestFailed(String),
 }
