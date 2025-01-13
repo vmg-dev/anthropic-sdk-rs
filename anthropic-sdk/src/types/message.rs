@@ -75,8 +75,7 @@ pub struct Message {
     /// Role of the message sender
     pub role: Role,
     /// Content of the message
-    #[serde(flatten)]
-    pub content: MessageContent,
+    pub content: String,
 }
 
 /// Role of a message sender
@@ -95,6 +94,18 @@ pub enum MessageContent {
     Text(String),
     /// Structured content blocks
     Blocks(Vec<ContentBlock>),
+}
+
+impl From<String> for MessageContent {
+    fn from(text: String) -> Self {
+        MessageContent::Text(text)
+    }
+}
+
+impl From<Vec<ContentBlock>> for MessageContent {
+    fn from(blocks: Vec<ContentBlock>) -> Self {
+        MessageContent::Blocks(blocks)
+    }
 }
 
 /// Content block in a message

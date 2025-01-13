@@ -12,9 +12,9 @@ impl MessageClient for AnthropicClient {
     /// More recently released models are listed first.
     async fn create_message<'a>(
         &'a self,
-        params: Option<&'a CreateMessageParams>,
+        body: Option<&'a CreateMessageParams>,
     ) -> Result<CreateMessageResponse, MessageError> {
-        self.post("/messages", params).await
+        self.post("/messages", body).await
     }
 }
 
