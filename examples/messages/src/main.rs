@@ -1,6 +1,6 @@
 use anthropic_sdk::clients::AnthropicClient;
 use anthropic_sdk::types::message::{
-    CreateMessageParams, Message, MessageClient, MessageError, Role,
+    CreateMessageParams, Message, MessageClient, MessageError, RequiredMessageParams, Role,
 };
 use std::env;
 use tracing::{error, info};
@@ -25,20 +25,20 @@ async fn main() {
 
     let client = AnthropicClient::new::<MessageError>(api_key, api_version).unwrap();
 
-    let body = CreateMessageParams {
+    let body = CreateMessageParams::new(RequiredMessageParams {
         model: "claude-3-5-sonnet-20240620".to_string(),
         messages: vec![Message::new_text(Role::User, "Hello, Claude")],
         max_tokens: 1024,
-        system: None,
-        temperature: None,
-        stop_sequences: None,
-        stream: None,
-        top_k: None,
-        top_p: None,
-        tools: None,
-        tool_choice: None,
-        metadata: None,
-    };
+    });
+
+    // Or with some optional parameters
+    // let params_with_options = CreateMessageParams::new(RequiredMessageParams {
+    //     model: "claude-3-5-sonnet-20240620".to_string(),
+    //     messages: vec![Message::new_text(Role::User, "Hello, Claude")],
+    //     max_tokens: 1024,
+    // })
+    // .with_temperature(0.7)
+    // .with_system("You are a helpful assistant");
 
     info!("body: {:?}", body);
 
