@@ -1,3 +1,7 @@
+//! Models API
+//!
+//! This module contains the types and functions for the Anthropic Models API.
+//!
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
