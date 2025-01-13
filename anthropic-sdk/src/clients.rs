@@ -1,4 +1,4 @@
-use crate::types::model::{ListModelsParams, ListModelsResponse, ModelError};
+use crate::types::model::{ListModelsParams, ModelError};
 use reqwest::{header, Client as ReqwestClient};
 use serde::de::DeserializeOwned;
 
