@@ -2,8 +2,17 @@
 //!
 //! This module contains the types and functions for the Anthropic Models API.
 //!
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+
+#[async_trait]
+pub trait ModelClient {
+    async fn list_models<'a>(
+        &'a self,
+        params: Option<&'a ListModelsParams>,
+    ) -> Result<ListModelsResponse, ModelError>;
+}
 
 /// Response structure for the List Models API endpoint
 #[derive(Debug, Serialize, Deserialize)]

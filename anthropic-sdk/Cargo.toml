@@ -7,3 +7,4 @@ edition = "2021"
 thiserror = "2.0.11"
 serde = { version = "1.0.217", features = ["derive"] }
 reqwest = { version = "0.12.12", features = ["json"] }
+async-trait = "0.1.85"
