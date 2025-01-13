@@ -1,14 +1,32 @@
 use anthropic_sdk::clients::AnthropicClient;
 use anthropic_sdk::types::model::ModelClient;
+use std::env;
+use tracing::{error, info};
 
 #[tokio::main]
 async fn main() {
-    let client = AnthropicClient::new(
-        "sk-ant-api03-000000000000000000000000-0000000000",
-        "2024-06-01",
-    )
-    .unwrap();
+    tracing_subscriber::fmt()
+        .with_ansi(true)
+        .with_target(true)
+        .with_thread_ids(true)
+        .with_line_number(true)
+        .with_file(false)
+        .with_level(true)
+        .try_init()
+        .expect("Failed to initialize logger");
 
-    let models = client.list_models(None).await.unwrap();
-    println!("{:?}", models);
+    let client =
+        AnthropicClient::new(env::var("ANTHROPIC_API_KEY").unwrap(), "2023-06-01").unwrap();
+
+    match client.list_models(None).await {
+        Ok(models) => {
+            info!("Successfully retrieved models:");
+            for model in models.data {
+                info!("- {} ({})", model.display_name, model.id);
+            }
+        }
+        Err(e) => {
+            error!("Error: {}", e);
+        }
+    }
 }
