@@ -74,8 +74,9 @@ pub struct CreateMessageParams {
 pub struct Message {
     /// Role of the message sender
     pub role: Role,
-    /// Content of the message
-    pub content: String,
+    /// Content of the message (either string or array of content blocks)
+    #[serde(flatten)]
+    pub content: MessageContent,
 }
 
 /// Role of a message sender
@@ -91,21 +92,9 @@ pub enum Role {
 #[serde(untagged)]
 pub enum MessageContent {
     /// Simple text content
-    Text(String),
+    Text { content: String },
     /// Structured content blocks
-    Blocks(Vec<ContentBlock>),
-}
-
-impl From<String> for MessageContent {
-    fn from(text: String) -> Self {
-        MessageContent::Text(text)
-    }
-}
-
-impl From<Vec<ContentBlock>> for MessageContent {
-    fn from(blocks: Vec<ContentBlock>) -> Self {
-        MessageContent::Blocks(blocks)
-    }
+    Blocks { content: Vec<ContentBlock> },
 }
 
 /// Content block in a message
@@ -219,4 +208,47 @@ pub struct Usage {
     pub input_tokens: u32,
     /// Output tokens used
     pub output_tokens: u32,
+}
+
+impl Message {
+    /// Create a new message with simple text content
+    pub fn new_text(role: Role, text: impl Into<String>) -> Self {
+        Self {
+            role,
+            content: MessageContent::Text {
+                content: text.into(),
+            },
+        }
+    }
+
+    /// Create a new message with content blocks
+    pub fn new_blocks(role: Role, blocks: Vec<ContentBlock>) -> Self {
+        Self {
+            role,
+            content: MessageContent::Blocks { content: blocks },
+        }
+    }
+}
+
+// Helper methods for content blocks
+impl ContentBlock {
+    /// Create a new text block
+    pub fn text(text: impl Into<String>) -> Self {
+        Self::Text { text: text.into() }
+    }
+
+    /// Create a new image block
+    pub fn image(
+        type_: impl Into<String>,
+        media_type: impl Into<String>,
+        data: impl Into<String>,
+    ) -> Self {
+        Self::Image {
+            source: ImageSource {
+                type_: type_.into(),
+                media_type: media_type.into(),
+                data: data.into(),
+            },
+        }
+    }
 }

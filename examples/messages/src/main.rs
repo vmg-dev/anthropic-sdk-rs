@@ -27,10 +27,7 @@ async fn main() {
 
     let body = CreateMessageParams {
         model: "claude-3-5-sonnet-20240620".to_string(),
-        messages: vec![Message {
-            role: Role::User,
-            content: "Hello, world!".to_string(),
-        }],
+        messages: vec![Message::new_text(Role::User, "Hello, Claude")],
         max_tokens: 1024,
         system: None,
         temperature: None,
@@ -54,3 +51,33 @@ async fn main() {
         }
     }
 }
+
+//// Simple text message
+//let text_message = Message::new_text(Role::User, "Hello, Claude");
+//
+//// Message with text block
+//let text_block_message = Message::new_blocks(
+//    Role::User,
+//    vec![ContentBlock::text("Hello, Claude")],
+//);
+//
+//// Message with image and text
+//let mixed_message = Message::new_blocks(
+//    Role::User,
+//    vec![
+//        ContentBlock::image(
+//            "base64",
+//            "image/jpeg",
+//            "/9j/4AAQSkZJRg...",
+//        ),
+//        ContentBlock::text("What is in this image?"),
+//    ],
+//);
+//
+//// Using in CreateMessageParams
+//let params = CreateMessageParams {
+//    model: "claude-3-5-sonnet-20240620".to_string(),
+//    messages: vec![text_message],
+//    max_tokens: 1024,
+//    // ... other fields
+//};
