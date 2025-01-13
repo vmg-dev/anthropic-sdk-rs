@@ -1,6 +1,8 @@
 use anthropic_sdk::clients::AnthropicClient;
-use anthropic_sdk::types::message::MessageClient;
-use anthropic_sdk::types::message::MessageError;
+use anthropic_sdk::types::message::{
+    CreateMessageParams, CreateMessageResponse, Message, MessageClient, MessageContent,
+    MessageError, Role,
+};
 use std::env;
 use tracing::{error, info};
 
@@ -24,7 +26,25 @@ async fn main() {
 
     let client = AnthropicClient::new::<MessageError>(api_key, api_version).unwrap();
 
-    match client.create_message(None).await {
+    let params = CreateMessageParams {
+        model: "claude-3-5-sonnet-20240620".to_string(),
+        messages: vec![Message {
+            role: Role::User,
+            content: MessageContent::Text("Hello, world!".to_string()),
+        }],
+        max_tokens: 100,
+        system: None,
+        temperature: None,
+        stop_sequences: None,
+        stream: None,
+        top_k: None,
+        top_p: None,
+        tools: None,
+        tool_choice: None,
+        metadata: None,
+    };
+
+    match client.create_message(Some(&params)).await {
         Ok(message) => {
             info!("Successfully created message: {:?}", message.content);
         }
