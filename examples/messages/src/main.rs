@@ -1,6 +1,6 @@
 use anthropic_sdk::clients::AnthropicClient;
 use anthropic_sdk::types::message::{
-    CreateMessageParams, Message, MessageClient, MessageContent, MessageError, Role,
+    CreateMessageParams, Message, MessageClient, MessageError, Role,
 };
 use std::env;
 use tracing::{error, info};
