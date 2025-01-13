@@ -16,9 +16,10 @@ async fn main() {
         .try_init()
         .expect("Failed to initialize logger");
 
-    let client =
-        AnthropicClient::new::<ModelError>(env::var("ANTHROPIC_API_KEY").unwrap(), "2023-06-01")
-            .unwrap();
+    let api_key = env::var("ANTHROPIC_API_KEY").unwrap();
+    let api_version = env::var("ANTHROPIC_API_VERSION").unwrap_or("2023-06-01".to_string());
+
+    let client = AnthropicClient::new::<ModelError>(api_key, api_version).unwrap();
 
     match client.list_models(None).await {
         Ok(models) => {
