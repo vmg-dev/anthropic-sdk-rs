@@ -37,16 +37,17 @@ impl AnthropicClient {
     }
 
     /// Generic request sender that can handle different parameter types
-    pub(crate) async fn send_request<T, P, E>(
+    pub(crate) async fn send_request<T, Q, B, E>(
         &self,
         method: reqwest::Method,
         path: &str,
-        params: Option<&P>,
-        body: Option<&P>,
+        query: Option<&Q>,
+        body: Option<&B>,
     ) -> Result<T, E>
     where
         T: DeserializeOwned,
-        P: Serialize + ?Sized,
+        Q: Serialize + ?Sized,
+        B: Serialize + ?Sized,
         E: StdError + From<String>,
     {
         let url = format!("{}{}", API_BASE_URL, path);
@@ -58,7 +59,7 @@ impl AnthropicClient {
             .header("x-api-key", &self.api_key);
 
         // Add query parameters if provided
-        if let Some(q) = params {
+        if let Some(q) = query {
             request = request.query(q);
         }
 
@@ -67,7 +68,9 @@ impl AnthropicClient {
             request = request.json(b);
         }
 
+        info!("request: {:?}", request);
         let response = request.send().await.map_err(|e| E::from(e.to_string()))?;
+        info!("response: {:?}", response);
 
         let status = response.status();
         let body = response
@@ -92,24 +95,24 @@ impl AnthropicClient {
     }
 
     /// Helper method for GET requests
-    pub(crate) async fn get<T, P, E>(&self, path: &str, params: Option<&P>) -> Result<T, E>
+    pub(crate) async fn get<T, Q, E>(&self, path: &str, query: Option<&Q>) -> Result<T, E>
     where
         T: DeserializeOwned,
-        P: Serialize + ?Sized,
+        Q: Serialize + ?Sized,
         E: StdError + From<String>,
     {
-        self.send_request::<T, P, E>(reqwest::Method::GET, path, params, None)
+        self.send_request::<T, Q, (), E>(reqwest::Method::GET, path, query, None)
             .await
     }
 
     /// Helper method for POST requests
-    pub(crate) async fn post<T, P, E>(&self, path: &str, body: Option<&P>) -> Result<T, E>
+    pub(crate) async fn post<T, B, E>(&self, path: &str, body: Option<&B>) -> Result<T, E>
     where
         T: DeserializeOwned,
-        P: Serialize + ?Sized,
+        B: Serialize + ?Sized,
         E: StdError + From<String>,
     {
-        self.send_request(reqwest::Method::POST, path, None, body)
+        self.send_request::<T, (), B, E>(reqwest::Method::POST, path, None, body)
             .await
     }
 }
