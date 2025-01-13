@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -12,6 +13,22 @@ pub enum MessageError {
     InvalidTopP(f32),
     #[error("API request failed: {0}")]
     RequestFailed(String),
+    #[error("API error: {0}")]
+    ApiError(String),
+}
+
+impl From<String> for MessageError {
+    fn from(error: String) -> Self {
+        MessageError::ApiError(error)
+    }
+}
+
+#[async_trait]
+pub trait MessageClient {
+    async fn create_message<'a>(
+        &'a self,
+        params: Option<&'a CreateMessageParams>,
+    ) -> Result<CreateMessageResponse, MessageError>;
 }
 
 /// Parameters for creating a message
