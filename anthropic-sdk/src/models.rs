@@ -12,13 +12,7 @@ impl ModelClient for AnthropicClient {
         &'a self,
         params: Option<&'a ListModelsParams>,
     ) -> Result<ListModelsResponse, ModelError> {
-        self.send_request::<ListModelsResponse, ListModelsParams, ModelError>(
-            reqwest::Method::GET,
-            "/models",
-            params,
-            None,
-        )
-        .await
+        self.get("/models", params).await
     }
 }
 
