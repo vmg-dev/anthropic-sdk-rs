@@ -10,7 +10,6 @@ const API_BASE_URL: &str = "https://api.anthropic.com/v1";
 pub struct AnthropicClient {
     client: ReqwestClient,
     api_key: String,
-    api_version: String,
 }
 
 impl AnthropicClient {
@@ -34,7 +33,6 @@ impl AnthropicClient {
         Ok(Self {
             client,
             api_key: api_key.into(),
-            api_version: api_version_str,
         })
     }
 
