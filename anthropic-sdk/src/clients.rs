@@ -13,7 +13,6 @@ pub struct AnthropicClient {
 }
 
 impl AnthropicClient {
-    /// Create a new Anthropic API client
     pub fn new(
         api_key: impl Into<String>,
         api_version: impl Into<String>,
@@ -38,8 +37,7 @@ impl AnthropicClient {
         })
     }
 
-    /// Generic request sender
-    pub async fn send_request<T: DeserializeOwned>(
+    pub(crate) async fn send_request<T: DeserializeOwned>(
         &self,
         method: reqwest::Method,
         path: &str,

@@ -1,4 +1,4 @@
-use crate::types::client::AnthropicClient;
+use crate::clients::AnthropicClient;
 use crate::types::model::{ListModelsParams, ListModelsResponse, ModelClient, ModelError};
 use async_trait::async_trait;
 
