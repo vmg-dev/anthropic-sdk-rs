@@ -17,6 +17,14 @@ pub enum ModelError {
     InvalidLimit(u16),
     #[error("API request failed: {0}")]
     RequestFailed(String),
+    #[error("API error: {0}")]
+    ApiError(String),
+}
+
+impl From<String> for ModelError {
+    fn from(error: String) -> Self {
+        ModelError::ApiError(error)
+    }
 }
 
 #[async_trait]

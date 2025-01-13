@@ -1,5 +1,6 @@
 use anthropic_sdk::clients::AnthropicClient;
 use anthropic_sdk::types::model::ModelClient;
+use anthropic_sdk::types::model::ModelError;
 use std::env;
 use tracing::{error, info};
 
@@ -16,7 +17,8 @@ async fn main() {
         .expect("Failed to initialize logger");
 
     let client =
-        AnthropicClient::new(env::var("ANTHROPIC_API_KEY").unwrap(), "2023-06-01").unwrap();
+        AnthropicClient::new::<ModelError>(env::var("ANTHROPIC_API_KEY").unwrap(), "2023-06-01")
+            .unwrap();
 
     match client.list_models(None).await {
         Ok(models) => {
