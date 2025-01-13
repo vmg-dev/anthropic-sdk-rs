@@ -1,6 +1,7 @@
 use crate::types::model::{ListModelsParams, ModelError};
 use reqwest::{header, Client as ReqwestClient};
 use serde::de::DeserializeOwned;
+use tracing::info;
 
 const API_BASE_URL: &str = "https://api.anthropic.com/v1";
 
@@ -44,6 +45,8 @@ impl AnthropicClient {
         query: Option<&ListModelsParams>,
     ) -> Result<T, ModelError> {
         let url = format!("{}{}", API_BASE_URL, path);
+        info!("url: {}", url);
+
         let mut request = self
             .client
             .request(method, &url)
@@ -58,17 +61,24 @@ impl AnthropicClient {
             .await
             .map_err(|e| ModelError::RequestFailed(e.to_string()))?;
 
-        if !response.status().is_success() {
-            let error_text = response
-                .text()
-                .await
-                .unwrap_or_else(|_| "Unknown error".to_string());
-            return Err(ModelError::RequestFailed(error_text));
+        let status = response.status();
+        let body = response.text().await.map_err(|e| {
+            ModelError::RequestFailed(format!("Failed to get response body: {}", e))
+        })?;
+
+        info!("Response status: {}", status);
+        info!("Response body: {}", body);
+
+        if !status.is_success() {
+            return Err(ModelError::RequestFailed(body));
         }
 
-        response
-            .json::<T>()
-            .await
-            .map_err(|e| ModelError::RequestFailed(e.to_string()))
+        // Now try to parse the JSON
+        serde_json::from_str(&body).map_err(|e| {
+            ModelError::RequestFailed(format!(
+                "JSON parsing error: {}. Response body: {}",
+                e, body
+            ))
+        })
     }
 }

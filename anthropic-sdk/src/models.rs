@@ -17,9 +17,10 @@ impl ModelClient for AnthropicClient {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    // TODO: Add tests for list_models
-}
+//#[cfg(test)]
+//mod tests {
+//    use super::*;
+//
+//    // TODO: Add tests for list_models
+//}
+//

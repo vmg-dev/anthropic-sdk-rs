@@ -5,6 +5,8 @@
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+use time::serde::rfc3339;
+use time::OffsetDateTime;
 
 #[async_trait]
 pub trait ModelClient {
@@ -30,29 +32,21 @@ pub struct ListModelsResponse {
 /// Represents an Anthropic model
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Model {
+    /// Type of the resource (always "model")
+    #[serde(rename = "type")]
+    pub type_: String,
+
     /// Unique identifier for the model
     pub id: String,
-    /// Name of the model (e.g., "claude-3-opus-20240229")
-    pub name: String,
-    /// Description of the model's capabilities
-    pub description: String,
-    /// Maximum context window size for the model
-    pub context_window: u32,
-    /// Whether the model supports system prompts
-    pub system_prompt_support: bool,
-    /// Model's capabilities and supported features
-    pub capabilities: ModelCapabilities,
-}
 
-/// Model capabilities and supported features
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ModelCapabilities {
-    /// Maximum tokens per minute rate limit
-    pub max_tokens_per_minute: u32,
-    /// Whether the model supports streaming responses
-    pub streaming: bool,
-    /// List of supported message formats
-    pub supported_formats: Vec<String>,
+    /// Display name of the model
+    #[serde(rename = "display_name")]
+    pub display_name: String,
+
+    /// Creation timestamp of the model
+    #[serde(rename = "created_at")]
+    #[serde(with = "rfc3339")]
+    pub created_at: OffsetDateTime,
 }
 
 /// Parameters for listing models
