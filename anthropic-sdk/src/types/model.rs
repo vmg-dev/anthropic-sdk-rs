@@ -50,10 +50,13 @@ pub struct ModelCapabilities {
 #[derive(Debug, Serialize, Default)]
 pub struct ListModelsParams {
     /// Cursor for pagination (before)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub before_id: Option<String>,
     /// Cursor for pagination (after)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub after_id: Option<String>,
     /// Number of items per page (1-1000)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<u16>,
 }
 
