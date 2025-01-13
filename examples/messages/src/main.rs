@@ -4,6 +4,9 @@ use anthropic_sdk::types::message::MessageError;
 use std::env;
 use tracing::{error, info};
 
+/// cd anthropic-sdk-rs/examples/messages
+/// cargo run
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
