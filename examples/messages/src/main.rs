@@ -25,11 +25,11 @@ async fn main() {
 
     let client = AnthropicClient::new::<MessageError>(api_key, api_version).unwrap();
 
-    let params = CreateMessageParams {
+    let body = CreateMessageParams {
         model: "claude-3-5-sonnet-20240620".to_string(),
         messages: vec![Message {
             role: Role::User,
-            content: MessageContent::Text("Hello, world!".to_string()),
+            content: "Hello, world!".to_string(),
         }],
         max_tokens: 1024,
         system: None,
@@ -43,7 +43,9 @@ async fn main() {
         metadata: None,
     };
 
-    match client.create_message(Some(&params)).await {
+    info!("body: {:?}", body);
+
+    match client.create_message(Some(&body)).await {
         Ok(message) => {
             info!("Successfully created message: {:?}", message.content);
         }
