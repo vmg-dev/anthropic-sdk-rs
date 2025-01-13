@@ -1,7 +1,6 @@
 use anthropic_sdk::clients::AnthropicClient;
 use anthropic_sdk::types::message::{
-    CreateMessageParams, CreateMessageResponse, Message, MessageClient, MessageContent,
-    MessageError, Role,
+    CreateMessageParams, Message, MessageClient, MessageContent, MessageError, Role,
 };
 use std::env;
 use tracing::{error, info};
@@ -32,7 +31,7 @@ async fn main() {
             role: Role::User,
             content: MessageContent::Text("Hello, world!".to_string()),
         }],
-        max_tokens: 100,
+        max_tokens: 1024,
         system: None,
         temperature: None,
         stop_sequences: None,
