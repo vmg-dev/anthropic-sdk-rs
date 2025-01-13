@@ -31,6 +31,13 @@ pub trait MessageClient {
     ) -> Result<CreateMessageResponse, MessageError>;
 }
 
+#[derive(Debug)]
+pub struct RequiredMessageParams {
+    pub model: String,
+    pub messages: Vec<Message>,
+    pub max_tokens: u32,
+}
+
 /// Parameters for creating a message
 #[derive(Debug, Serialize, Default)]
 pub struct CreateMessageParams {
@@ -67,6 +74,70 @@ pub struct CreateMessageParams {
     /// Request metadata
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<Metadata>,
+}
+
+impl From<RequiredMessageParams> for CreateMessageParams {
+    fn from(required: RequiredMessageParams) -> Self {
+        Self {
+            model: required.model,
+            messages: required.messages,
+            max_tokens: required.max_tokens,
+            ..Default::default()
+        }
+    }
+}
+
+impl CreateMessageParams {
+    /// Create new parameters with only required fields
+    pub fn new(required: RequiredMessageParams) -> Self {
+        required.into()
+    }
+
+    // Builder methods for optional parameters
+    pub fn with_system(mut self, system: impl Into<String>) -> Self {
+        self.system = Some(system.into());
+        self
+    }
+
+    pub fn with_temperature(mut self, temperature: f32) -> Self {
+        self.temperature = Some(temperature);
+        self
+    }
+
+    pub fn with_stop_sequences(mut self, stop_sequences: Vec<String>) -> Self {
+        self.stop_sequences = Some(stop_sequences);
+        self
+    }
+
+    pub fn with_stream(mut self, stream: bool) -> Self {
+        self.stream = Some(stream);
+        self
+    }
+
+    pub fn with_top_k(mut self, top_k: u32) -> Self {
+        self.top_k = Some(top_k);
+        self
+    }
+
+    pub fn with_top_p(mut self, top_p: f32) -> Self {
+        self.top_p = Some(top_p);
+        self
+    }
+
+    pub fn with_tools(mut self, tools: Vec<Tool>) -> Self {
+        self.tools = Some(tools);
+        self
+    }
+
+    pub fn with_tool_choice(mut self, tool_choice: ToolChoice) -> Self {
+        self.tool_choice = Some(tool_choice);
+        self
+    }
+
+    pub fn with_metadata(mut self, metadata: Metadata) -> Self {
+        self.metadata = Some(metadata);
+        self
+    }
 }
 
 /// Message in a conversation
