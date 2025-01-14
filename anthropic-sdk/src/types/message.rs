@@ -30,12 +30,6 @@ pub trait MessageClient {
     ) -> Result<CountMessageTokensResponse, MessageError>;
 }
 
-#[derive(Debug, Serialize, Default)]
-pub struct CountMessageTokensParams {
-    pub model: String,
-    pub messages: Vec<Message>,
-}
-
 #[derive(Debug)]
 pub struct RequiredMessageParams {
     pub model: String,
@@ -267,11 +261,6 @@ pub struct CreateMessageResponse {
     pub usage: Usage,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct CountMessageTokensResponse {
-    pub input_tokens: u32,
-}
-
 /// Reason for stopping message generation
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -332,4 +321,15 @@ impl ContentBlock {
             },
         }
     }
+}
+
+#[derive(Debug, Serialize, Default)]
+pub struct CountMessageTokensParams {
+    pub model: String,
+    pub messages: Vec<Message>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CountMessageTokensResponse {
+    pub input_tokens: u32,
 }
