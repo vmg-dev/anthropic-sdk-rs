@@ -9,11 +9,9 @@ An unofficial Rust SDK for the [Anthropic API](https://docs.anthropic.com/claude
 ## Features
 
 - Full async/await support
-- Type-safe API bindings
 - Comprehensive error handling
 - Pagination support
 - Token counting utilities
-- Detailed logging with tracing
 
 ## Installation
 
@@ -34,17 +32,17 @@ use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-// Initialize the client
-let client = AnthropicClient::new(
-env::var("ANTHROPIC_API_KEY")?,
-env::var("ANTHROPIC_API_VERSION").unwrap_or("2023-06-01".to_string()),
-)?;
-// List available models
-let models = client.list_models(None).await?;
-for model in models.data {
-println!("Model: {} ({})", model.display_name, model.id);
-}
-Ok(())
+    // Initialize the client
+    let client = AnthropicClient::new(
+        env::var("ANTHROPIC_API_KEY")?,
+        env::var("ANTHROPIC_API_VERSION").unwrap_or("2023-06-01".to_string()),
+    )?;
+    // List available models
+    let models = client.list_models(None).await?;
+    for model in models.data {
+        println!("Model: {} ({})", model.display_name, model.id);
+    }
+    Ok(())
 }
 ```
 
