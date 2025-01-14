@@ -35,6 +35,7 @@ impl ModelClient for AnthropicClient {
     /// ```no_run
     /// use anthropic_sdk::clients::AnthropicClient;
     /// use anthropic_sdk::types::model::{ModelClient, ModelError};
+    /// use tokio;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), ModelError> {
