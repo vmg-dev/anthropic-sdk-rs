@@ -34,6 +34,30 @@ impl MessageClient for AnthropicClient {
     /// - The request fails to send
     /// - The API returns an error response
     /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_sdk::clients::AnthropicClient;
+    /// use anthropic_sdk::types::message::{MessageClient, MessageError};
+    /// use anthropic_sdk::types::message::{
+    ///     CreateMessageParams, CreateMessageResponse
+    /// };
+    /// use tokio;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = AnthropicClient::new::<MessageError>(
+    ///     "your-api-key",
+    ///     "2023-06-01",
+    /// )?;
+    ///
+    /// let params = CreateMessageParams::default();
+    /// let response = client.create_message(Some(&params)).await?;
+    ///
+    /// println!("Response: {:?}", response);
+    /// # Ok(())
+    /// # }
+    /// ```
     async fn create_message<'a>(
         &'a self,
         body: Option<&'a CreateMessageParams>,
@@ -60,6 +84,17 @@ impl MessageClient for AnthropicClient {
     /// - The request fails to send
     /// - The API returns an error response
     /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_sdk::clients::AnthropicClient;
+    /// use anthropic_sdk::types::message::{MessageClient, MessageError};
+    /// use tokio;
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// # Ok(())
+    /// # }
+    /// ```
     async fn count_tokens<'a>(
         &'a self,
         body: Option<&'a CountMessageTokensParams>,
@@ -67,10 +102,3 @@ impl MessageClient for AnthropicClient {
         self.post("/messages/count_tokens", body).await
     }
 }
-
-//#[cfg(test)]
-//mod tests {
-//    use super::*;
-//
-//    // TODO: Add tests for message endpoints
-//}
