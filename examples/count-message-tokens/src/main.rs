@@ -1,5 +1,5 @@
-use anthropic_sdk::clients::AnthropicClient;
-use anthropic_sdk::types::message::{
+use anthropic_ai_sdk::clients::AnthropicClient;
+use anthropic_ai_sdk::types::message::{
     CountMessageTokensParams, Message, MessageClient, MessageError, Role,
 };
 use std::env;

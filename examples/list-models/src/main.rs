@@ -1,6 +1,6 @@
-use anthropic_sdk::clients::AnthropicClient;
-use anthropic_sdk::types::model::ModelClient;
-use anthropic_sdk::types::model::ModelError;
+use anthropic_ai_sdk::clients::AnthropicClient;
+use anthropic_ai_sdk::types::model::ModelClient;
+use anthropic_ai_sdk::types::model::ModelError;
 use std::env;
 use tracing::{error, info};
 

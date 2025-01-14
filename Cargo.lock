@@ -18,8 +18,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
 
 [[package]]
-name = "anthropic-sdk"
-version = "0.0.1"
+name = "anthropic-ai-sdk"
+version = "0.0.2"
 dependencies = [
  "async-trait",
  "reqwest",
@@ -128,7 +128,7 @@ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 name = "count-message-tokens"
 version = "0.1.0"
 dependencies = [
- "anthropic-sdk",
+ "anthropic-ai-sdk",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -602,7 +602,7 @@ checksum = "d26c52dbd32dccf2d10cac7725f8eae5296885fb5703b261f7d0a0739ec807ab"
 name = "list-models"
 version = "0.1.0"
 dependencies = [
- "anthropic-sdk",
+ "anthropic-ai-sdk",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -640,7 +640,7 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 name = "messages"
 version = "0.1.0"
 dependencies = [
- "anthropic-sdk",
+ "anthropic-ai-sdk",
  "tokio",
  "tracing",
  "tracing-subscriber",
