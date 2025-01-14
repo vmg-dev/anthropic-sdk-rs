@@ -34,7 +34,7 @@ async fn main() {
 
     match client.count_tokens(Some(&body)).await {
         Ok(message) => {
-            info!("Successfully created message: {:?}", message.content);
+            info!("Successfully created message: {:?}", message.input_tokens);
         }
         Err(e) => {
             error!("Error: {}", e);
