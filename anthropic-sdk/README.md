@@ -1,5 +1,7 @@
 # Anthropic Rust SDK
 
+[![Crates.io](https://img.shields.io/crates/v/anthropic-sdk.svg)](https://crates.io/crates/anthropic-ai-sdk)
+[![Documentation](https://docs.rs/anthropic-sdk/badge.svg)](https://docs.rs/anthropic-ai-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An unofficial Rust SDK for the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started).
@@ -18,7 +20,7 @@ Add this to your `Cargo.toml`:
 ```
 toml
 [dependencies]
-anthropic-sdk = "0.0.1"
+anthropic-ai-sdk = "0.0.1"
 ```
 
 ## Quick Start
