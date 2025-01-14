@@ -27,7 +27,7 @@ pub trait MessageClient {
     async fn count_tokens<'a>(
         &'a self,
         params: Option<&'a CountMessageTokensParams>,
-    ) -> Result<CreateMessageResponse, MessageError>;
+    ) -> Result<CountMessageTokensResponse, MessageError>;
 }
 
 #[derive(Debug, Serialize, Default)]
@@ -265,6 +265,11 @@ pub struct CreateMessageResponse {
     pub type_: String,
     /// Usage statistics
     pub usage: Usage,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CountMessageTokensResponse {
+    pub input_tokens: u32,
 }
 
 /// Reason for stopping message generation

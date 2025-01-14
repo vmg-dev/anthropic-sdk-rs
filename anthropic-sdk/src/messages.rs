@@ -1,7 +1,7 @@
 use crate::clients::AnthropicClient;
 use crate::types::message::{
-    CountMessageTokensParams, CreateMessageParams, CreateMessageResponse, MessageClient,
-    MessageError,
+    CountMessageTokensParams, CountMessageTokensResponse, CreateMessageParams,
+    CreateMessageResponse, MessageClient, MessageError,
 };
 use async_trait::async_trait;
 
@@ -21,7 +21,7 @@ impl MessageClient for AnthropicClient {
     async fn count_tokens<'a>(
         &'a self,
         body: Option<&'a CountMessageTokensParams>,
-    ) -> Result<CreateMessageResponse, MessageError> {
+    ) -> Result<CountMessageTokensResponse, MessageError> {
         self.post("/messages/count_tokens", body).await
     }
 }
