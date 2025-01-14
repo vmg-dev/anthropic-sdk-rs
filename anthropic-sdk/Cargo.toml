@@ -2,6 +2,14 @@
 name = "anthropic-sdk"
 version = "0.0.1"
 edition = "2021"
+authors = ["Katsuhiro Honda<freewave3@gmail.com>"]
+categories = ["api-bindings"]
+description = "Unofficial Rust SDK for Anthropic's Claude AI API"
+edition = "2021"
+keywords = ["anthropic", "sdk", "ai"]
+license = "MIT"
+repository = "https://github.com/e-bebe/anthropic-sdk-rs"
+rust-version = "1.80.1"
 
 [dependencies]
 thiserror = "2.0.11"
