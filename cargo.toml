@@ -1,4 +1,0 @@
-[workspace]
-members = [ "anthropic-sdk", "examples/count-message-tokens", "examples/list-models", "examples/messages"]
-default-members = ["anthropic-sdk"]
-resolver = "2"
