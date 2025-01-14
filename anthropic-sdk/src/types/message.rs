@@ -5,12 +5,6 @@ use thiserror::Error;
 /// Error types for the Messages API
 #[derive(Debug, Error)]
 pub enum MessageError {
-    #[error("Invalid token count: {0}")]
-    InvalidTokenCount(u32),
-    #[error("Invalid temperature value: {0}")]
-    InvalidTemperature(f32),
-    #[error("Invalid top_p value: {0}")]
-    InvalidTopP(f32),
     #[error("API request failed: {0}")]
     RequestFailed(String),
     #[error("API error: {0}")]
