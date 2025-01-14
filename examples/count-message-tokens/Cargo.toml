@@ -1,0 +1,10 @@
+[package]
+name = "count-message-tokens"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anthropic-sdk = {path = "../../anthropic-sdk"}
+tokio = { version = "1.43.0", features = ["full"] }
+tracing-subscriber = "0.3.19"
+tracing = "0.1.41"
