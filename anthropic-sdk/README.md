@@ -26,8 +26,8 @@ anthropic-ai-sdk = "0.0.1"
 ## Quick Start
 
 ```rust
-use anthropic_sdk::clients::AnthropicClient;
-use anthropic_sdk::types::model::ModelClient;
+use anthropic_ai_sdk::clients::AnthropicClient;
+use anthropic_ai_sdk::types::model::ModelClient;
 use std::env;
 
 #[tokio::main]
