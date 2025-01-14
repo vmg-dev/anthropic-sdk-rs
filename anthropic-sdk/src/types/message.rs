@@ -1,3 +1,7 @@
+//! Messages API
+//!
+//! This module contains the types and functions for the Anthropic Messages API.
+//!
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -17,23 +21,30 @@ impl From<String> for MessageError {
     }
 }
 
+/// Client interface for the Messages API
 #[async_trait]
 pub trait MessageClient {
+    /// Creates a new message using the specified parameters
     async fn create_message<'a>(
         &'a self,
         params: Option<&'a CreateMessageParams>,
     ) -> Result<CreateMessageResponse, MessageError>;
 
+    /// Counts tokens for the given messages
     async fn count_tokens<'a>(
         &'a self,
         params: Option<&'a CountMessageTokensParams>,
     ) -> Result<CountMessageTokensResponse, MessageError>;
 }
 
+/// Required parameters for creating a message
 #[derive(Debug)]
 pub struct RequiredMessageParams {
+    /// Model identifier to use for generation
     pub model: String,
+    /// Input messages for the conversation
     pub messages: Vec<Message>,
+    /// Maximum number of tokens to generate
     pub max_tokens: u32,
 }
 
@@ -323,13 +334,18 @@ impl ContentBlock {
     }
 }
 
+/// Parameters for counting message tokens
 #[derive(Debug, Serialize, Default)]
 pub struct CountMessageTokensParams {
+    /// Model identifier to use for token counting
     pub model: String,
+    /// Messages to count tokens for
     pub messages: Vec<Message>,
 }
 
+/// Response from token counting request
 #[derive(Debug, Deserialize)]
 pub struct CountMessageTokensResponse {
+    /// Number of input tokens counted
     pub input_tokens: u32,
 }
