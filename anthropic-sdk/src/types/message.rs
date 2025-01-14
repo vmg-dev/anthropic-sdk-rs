@@ -23,6 +23,17 @@ pub trait MessageClient {
         &'a self,
         params: Option<&'a CreateMessageParams>,
     ) -> Result<CreateMessageResponse, MessageError>;
+
+    async fn count_tokens<'a>(
+        &'a self,
+        params: Option<&'a CountMessageTokensParams>,
+    ) -> Result<CreateMessageResponse, MessageError>;
+}
+
+#[derive(Debug, Serialize, Default)]
+pub struct CountMessageTokensParams {
+    pub model: String,
+    pub messages: Vec<Message>,
 }
 
 #[derive(Debug)]
