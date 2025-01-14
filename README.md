@@ -1,1 +1,1 @@
-anthropic-sdk/README.md
+anthropic-ai-sdk/README.md
