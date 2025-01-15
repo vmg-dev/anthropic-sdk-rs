@@ -32,27 +32,23 @@ use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Initialize the client
-    let client = AnthropicClient::new(
-        env::var("ANTHROPIC_API_KEY")?,
-        env::var("ANTHROPIC_API_VERSION").unwrap_or("2023-06-01".to_string()),
-    )?;
-    // List available models
-    let models = client.list_models(None).await?;
-    for model in models.data {
-        println!("Model: {} ({})", model.display_name, model.id);
-    }
+    let client = AnthropicClient::new::<MessageError>("ANTHROPIC_API_KEY", "ANTHROPIC_API_VERSION").unwrap();
+
+    let body = CreateMessageParams::new(RequiredMessageParams {
+        model: "claude-3-5-sonnet-20240620".to_string(),
+        messages: vec![Message::new_text(Role::User, "Hello, Claude")],
+        max_tokens: 1024,
+    });
     Ok(())
 }
 ```
 
-
 ## Examples
 
-Check out the [examples](./examples) directory for more usage examples:
+Check out the [examples](../examples) directory for more usage examples:
 
-- [List Models](./examples/list-models/src/main.rs) - How to list available models
-- [Count Message Tokens](./examples/count-message-tokens/src/main.rs) - How to count tokens in a message
+- [List Models](../examples/list-models/src/main.rs) - How to list available models
+- [Count Message Tokens](../examples/count-message-tokens/src/main.rs) - How to count tokens in a message
 
 ## API Coverage
 
@@ -67,7 +63,7 @@ Check out the [examples](./examples) directory for more usage examples:
 
 ### Prerequisites
 
-- Rust 1.75 or later
+- Rust 1.81 or later
 - An Anthropic API key
 
 ### Running Tests
