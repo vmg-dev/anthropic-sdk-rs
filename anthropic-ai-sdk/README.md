@@ -78,7 +78,6 @@ Run an example
 cargo run --example list-models
 ```
 
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
@@ -100,4 +99,4 @@ If you discover a security vulnerability within this package, please send an e-m
 
 ## Support
 
-For support questions, please use the [GitHub Issues](https://github.com/yourusername/anthropic-sdk/issues).
+For support questions, please use the [GitHub Issues](https://github.com/e-bebe/anthropic-sdk-rs/issues).
