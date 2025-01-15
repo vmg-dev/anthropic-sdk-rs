@@ -24,7 +24,6 @@ cargo add anthropic-ai-sdk
 ```rust
 use anthropic_ai_sdk::clients::AnthropicClient;
 use anthropic_ai_sdk::types::model::ModelClient;
-use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
