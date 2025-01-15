@@ -1,6 +1,5 @@
 # Anthropic Rust SDK
 
-[<img alt="github" src="https://img.shields.io/badge/github-dtolnay/quote-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/e-bebe/anthropic-ai-sdk)
 [![Crates.io](https://img.shields.io/crates/v/anthropic-ai-sdk.svg)](https://crates.io/crates/anthropic-ai-sdk)
 [![Documentation](https://docs.rs/anthropic-ai-sdk/badge.svg)](https://docs.rs/anthropic-ai-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
