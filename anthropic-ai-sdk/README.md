@@ -15,7 +15,9 @@ An unofficial Rust SDK for the [Anthropic API](https://docs.anthropic.com/claude
 
 ## Installation
 
+```bash
 cargo add anthropic-ai-sdk
+```
 
 ## Quick Start
 
