@@ -33,8 +33,8 @@ impl ModelClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_sdk::clients::AnthropicClient;
-    /// use anthropic_sdk::types::model::{ModelClient, ModelError};
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::model::{ModelClient, ModelError};
     /// use tokio;
     ///
     /// #[tokio::main]
@@ -60,11 +60,3 @@ impl ModelClient for AnthropicClient {
         self.get("/models", params).await
     }
 }
-
-//#[cfg(test)]
-//mod tests {
-//    use super::*;
-//
-//    // TODO: Add tests for list_models
-//}
-//

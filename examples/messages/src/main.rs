@@ -5,9 +5,6 @@ use anthropic_ai_sdk::types::message::{
 use std::env;
 use tracing::{error, info};
 
-/// cd anthropic-sdk-rs/examples/messages
-/// cargo run
-
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
@@ -51,33 +48,3 @@ async fn main() {
         }
     }
 }
-
-//// Simple text message
-//let text_message = Message::new_text(Role::User, "Hello, Claude");
-//
-//// Message with text block
-//let text_block_message = Message::new_blocks(
-//    Role::User,
-//    vec![ContentBlock::text("Hello, Claude")],
-//);
-//
-//// Message with image and text
-//let mixed_message = Message::new_blocks(
-//    Role::User,
-//    vec![
-//        ContentBlock::image(
-//            "base64",
-//            "image/jpeg",
-//            "/9j/4AAQSkZJRg...",
-//        ),
-//        ContentBlock::text("What is in this image?"),
-//    ],
-//);
-//
-//// Using in CreateMessageParams
-//let params = CreateMessageParams {
-//    model: "claude-3-5-sonnet-20240620".to_string(),
-//    messages: vec![text_message],
-//    max_tokens: 1024,
-//    // ... other fields
-//};

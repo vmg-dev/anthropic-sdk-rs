@@ -38,9 +38,9 @@ impl MessageClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_sdk::clients::AnthropicClient;
-    /// use anthropic_sdk::types::message::{MessageClient, MessageError};
-    /// use anthropic_sdk::types::message::{
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message::{MessageClient, MessageError};
+    /// use anthropic_ai_sdk::types::message::{
     ///     CreateMessageParams, CreateMessageResponse
     /// };
     /// use tokio;
@@ -88,8 +88,8 @@ impl MessageClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_sdk::clients::AnthropicClient;
-    /// use anthropic_sdk::types::message::{MessageClient, MessageError};
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message::{MessageClient, MessageError};
     /// use tokio;
     /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
     /// # Ok(())

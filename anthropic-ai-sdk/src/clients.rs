@@ -20,8 +20,8 @@ const API_BASE_URL: &str = "https://api.anthropic.com/v1";
 /// # Examples
 ///
 /// ```no_run
-/// use anthropic_sdk::clients::AnthropicClient;
-/// use anthropic_sdk::types::model::ModelError;
+/// use anthropic_ai_sdk::clients::AnthropicClient;
+/// use anthropic_ai_sdk::types::model::ModelError;
 ///
 /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 /// let client = AnthropicClient::new::<ModelError>(
@@ -56,8 +56,8 @@ impl AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// # use anthropic_sdk::clients::AnthropicClient;
-    /// # use anthropic_sdk::types::model::ModelError;
+    /// # use anthropic_ai_sdk::clients::AnthropicClient;
+    /// # use anthropic_ai_sdk::types::model::ModelError;
     /// let client = AnthropicClient::new::<ModelError>(
     ///     "your-api-key",
     ///     "2023-06-01",
