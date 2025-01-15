@@ -71,10 +71,15 @@ cargo test
 
 ### Running Examples
 
-```basg
 Set your API key
+
+```bash
 export ANTHROPIC_API_KEY="your-api-key"
+```
+
 Run an example
+
+```bash
 cargo run --example list-models
 ```
 
