@@ -15,13 +15,7 @@ An unofficial Rust SDK for the [Anthropic API](https://docs.anthropic.com/claude
 
 ## Installation
 
-Add this to your `Cargo.toml`:
-
-```
-toml
-[dependencies]
-anthropic-ai-sdk = "0.0.1"
-```
+cargo add anthropic-ai-sdk
 
 ## Quick Start
 
