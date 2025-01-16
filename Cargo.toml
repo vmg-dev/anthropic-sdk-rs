@@ -1,4 +1,10 @@
 [workspace]
-members = ["anthropic-ai-sdk", "examples/messages/count-message-tokens", "examples/messages/messages", "examples/models/list-models", "examples/models/get-a-model" ]
+members = [
+    "anthropic-ai-sdk",
+    "examples/messages/count-message-tokens",
+    "examples/messages/messages",
+    "examples/models/list-models",
+    "examples/models/get-a-model",
+    ]
 default-members = ["anthropic-ai-sdk"]
 resolver = "2"
