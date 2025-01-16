@@ -91,6 +91,12 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
     - [ ] Update Workspace
     - [ ] Create Workspace
     - [ ] Archive Workspace
+  - Workspace Member Management
+    - [ ] Get Workspace Member
+    - [ ] List Workspace Member
+    - [ ] Get Workspace Member
+    - [ ] Update Workspace Member
+    - [ ] Delete Workspace Member
 
 ## Development
 
