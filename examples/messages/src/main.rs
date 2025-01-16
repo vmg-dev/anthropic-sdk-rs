@@ -17,7 +17,7 @@ async fn main() {
         .try_init()
         .expect("Failed to initialize logger");
 
-    let api_key = env::var("ANTHROPIC_API_KEY").unwrap();
+    let api_key = env::var("ANTHROPIC_API_KEY").expect("ANTHROPIC_API_KEY is not set");
     let api_version = env::var("ANTHROPIC_API_VERSION").unwrap_or("2023-06-01".to_string());
 
     let client = AnthropicClient::new::<MessageError>(api_key, api_version).unwrap();

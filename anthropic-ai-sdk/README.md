@@ -64,7 +64,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
 
 - Models
   - [x] List Models
-  - [ ] Get a Model
+  - [x] Get a Model
 - Messages
   - [x] Messages
   - [x] Count Message Tokens
