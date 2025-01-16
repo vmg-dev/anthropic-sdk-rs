@@ -143,7 +143,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - [Anthropic API Documentation](https://docs.anthropic.com/claude/reference/getting-started)
-- [Rust Async Book](https://rust-lang.github.io/async-book/)
 
 ## Security
 

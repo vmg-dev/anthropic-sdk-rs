@@ -4,7 +4,7 @@
 //! It provides functionality for listing available models and their capabilities.
 
 use crate::clients::AnthropicClient;
-use crate::types::model::{ListModelsParams, ListModelsResponse, ModelClient, ModelError};
+use crate::types::model::{ListModelsParams, ListModelsResponse, Model, ModelClient, ModelError};
 use async_trait::async_trait;
 
 #[async_trait]
@@ -58,5 +58,50 @@ impl ModelClient for AnthropicClient {
         params: Option<&'a ListModelsParams>,
     ) -> Result<ListModelsResponse, ModelError> {
         self.get("/models", params).await
+    }
+
+    /// Get a model
+    ///
+    /// Retrieves detailed information about a specific model, including its capabilities and parameters.
+    ///
+    /// # Arguments
+    ///
+    /// * `model_id` - The ID of the model to retrieve
+    ///
+    /// # Returns
+    ///
+    /// Returns the model's details on success.
+    ///
+    /// # Errors
+    ///
+    /// Returns a `ModelError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed or is not a valid model
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::model::{ModelClient, ModelError};
+    /// use tokio;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), ModelError> {
+    ///     let client = AnthropicClient::new::<ModelError>(
+    ///         "your-api-key",
+    ///         "2023-06-01",
+    ///     )?;
+    ///
+    ///     // Get a model
+    ///     let model = client.get_model("claude-3-5-sonnet-20240620").await?;
+    ///     println!("Model: {}", model.display_name);
+    ///
+    ///     Ok(())
+    /// }
+    /// ```
+    async fn get_model<'a>(&'a self, model_id: &'a str) -> Result<Model, ModelError> {
+        self.get(&format!("/models/{}", model_id), Option::<&()>::None)
+            .await
     }
 }

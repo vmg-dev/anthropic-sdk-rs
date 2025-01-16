@@ -33,6 +33,8 @@ pub trait ModelClient {
         &'a self,
         params: Option<&'a ListModelsParams>,
     ) -> Result<ListModelsResponse, ModelError>;
+
+    async fn get_model<'a>(&'a self, model_id: &'a str) -> Result<Model, ModelError>;
 }
 
 /// Response structure for the List Models API endpoint
