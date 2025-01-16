@@ -62,12 +62,18 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
 
 ## API Coverage
 
-- [x] List Models
-- [x] Create Message
-- [x] Count Message Tokens
-- [ ] Stream Message
-- [ ] Upload Files
-- [ ] Delete Files
+- Models
+ - [x] List Models
+ - [ ] Get a Model
+- Messages
+ - [x] Messages
+ - [x] Count Message Tokens
+- Message Batches
+ - [ ] Retrieve a Message Batch
+ - [ ] Retrieve Message Batch Results
+ - [ ] List Message Batches
+ - [ ] Cancel a Message Batch
+ - [ ] Delete a Message Batch
 
 ## Development
 
