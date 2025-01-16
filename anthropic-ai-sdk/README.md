@@ -127,7 +127,7 @@ export ANTHROPIC_API_KEY="your-api-key"
 Run an example
 
 ```bash
-cd examples/list-models
+cd examples/models/list-models
 cargo run 
 ```
 
