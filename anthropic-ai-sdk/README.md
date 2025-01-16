@@ -57,6 +57,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/examples) directory for more usage examples:
 
 - [List Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/list-models/src/main.rs) - How to list available models
+- [Get a Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/get-a-models/src/main.rs) - How to get a model
 - [Message](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/messages/src/main.rs) - How to create a message
 - [Count Message Tokens](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/count-message-tokens/src/main.rs) - How to count tokens in a message
 
