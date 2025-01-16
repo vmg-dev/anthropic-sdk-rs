@@ -63,20 +63,28 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
 ## API Coverage
 
 - Models
- - [x] List Models
- - [ ] Get a Model
+  - [x] List Models
+  - [ ] Get a Model
 - Messages
- - [x] Messages
- - [x] Count Message Tokens
+  - [x] Messages
+  - [x] Count Message Tokens
 - Message Batches
- - [ ] Retrieve a Message Batch
- - [ ] Retrieve Message Batch Results
- - [ ] List Message Batches
- - [ ] Cancel a Message Batch
- - [ ] Delete a Message Batch
+  - [ ] Retrieve a Message Batch
+  - [ ] Retrieve Message Batch Results
+  - [ ] List Message Batches
+  - [ ] Cancel a Message Batch
+  - [ ] Delete a Message Batch
 - Admin API
   - Organization Member Management
     - [ ] Get User
+    - [ ] List Users
+    - [ ] Update User
+    - [ ] Remove User
+  - Organization Invites
+    - [ ] Get Invite
+    - [ ] List Invites
+    - [ ] Create Invite
+    - [ ] Delete Invite
 
 ## Development
 
