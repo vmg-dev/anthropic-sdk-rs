@@ -23,17 +23,31 @@ cargo add anthropic-ai-sdk
 
 ```rust
 use anthropic_ai_sdk::clients::AnthropicClient;
-use anthropic_ai_sdk::types::model::ModelClient;
+use anthropic_ai_sdk::types::message::{
+    CreateMessageParams, Message, MessageClient, MessageError, RequiredMessageParams, Role,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = AnthropicClient::new::<MessageError>("ANTHROPIC_API_KEY", "ANTHROPIC_API_VERSION").unwrap();
+
+    let anthropic_api_key = std::env::var("ANTHROPIC_API_KEY").unwrap();
+    let client = AnthropicClient::new::<MessageError>(anthropic_api_key, "2023-06-01").unwrap();
 
     let body = CreateMessageParams::new(RequiredMessageParams {
         model: "claude-3-5-sonnet-20240620".to_string(),
         messages: vec![Message::new_text(Role::User, "Hello, Claude")],
         max_tokens: 1024,
     });
+
+    match client.create_message(Some(&body)).await {
+        Ok(message) => {
+            println!("Successfully created message: {:?}", message.content);
+        }
+        Err(e) => {
+            println!("Error: {}", e);
+        }
+    }
+
     Ok(())
 }
 ```
