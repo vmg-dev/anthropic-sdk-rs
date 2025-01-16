@@ -1,10 +1,10 @@
 [package]
-name = "list-models"
+name = "get-a-models"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anthropic-ai-sdk = {path = "../../anthropic-ai-sdk"}
+anthropic-ai-sdk = {path = "../../../anthropic-ai-sdk"}
 tokio = { version = "1.43.0", features = ["full"] }
 tracing-subscriber = "0.3.19"
 tracing = "0.1.41"
