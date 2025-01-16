@@ -97,6 +97,10 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
     - [ ] Get Workspace Member
     - [ ] Update Workspace Member
     - [ ] Delete Workspace Member
+- API Keys
+  - [ ] Get API Key
+  - [ ] List API Keys
+  - [ ] Update API Keys
 
 ## Development
 
