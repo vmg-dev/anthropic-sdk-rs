@@ -5,6 +5,7 @@ members = [
     "examples/messages/messages",
     "examples/models/list-models",
     "examples/models/get-a-model",
+    "examples/message-batches/create-a-message-batch",
     ]
 default-members = ["anthropic-ai-sdk"]
 resolver = "2"

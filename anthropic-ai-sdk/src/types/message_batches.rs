@@ -158,13 +158,3 @@ impl MessageRequest {
         self
     }
 }
-
-impl Message {
-    /// Create a new Message
-    pub fn new(role: impl Into<String>, content: impl Into<String>) -> Self {
-        Self {
-            role: role.into(),
-            content: content.into(),
-        }
-    }
-}
