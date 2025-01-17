@@ -44,8 +44,8 @@ pub trait MessageBatchClient {
     /// Retrieve a message batch
     async fn retrieve_message_batch<'a>(
         &'a self,
-        id: &'a str,
-    ) -> Result<MessageBatch, MessageBatchError>;
+        params: &'a RetrieveMessageBatchParams,
+    ) -> Result<RetrieveMessageBatchResponse, MessageBatchError>;
 }
 
 /// Processing status of a Message Batch
@@ -248,3 +248,20 @@ impl ListMessageBatchesParams {
         self
     }
 }
+
+/// Parameters for retrieving a message batch
+#[derive(Debug, Serialize)]
+pub struct RetrieveMessageBatchParams {
+    /// ID of the message batch to retrieve
+    pub id: String,
+}
+
+impl RetrieveMessageBatchParams {
+    /// Create a new RetrieveMessageBatchParams
+    pub fn new(id: impl Into<String>) -> Self {
+        Self { id: id.into() }
+    }
+}
+
+/// Response type for retrieving a message batch
+pub type RetrieveMessageBatchResponse = MessageBatch;

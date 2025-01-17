@@ -6,7 +6,8 @@
 use crate::clients::AnthropicClient;
 use crate::types::message_batches::{
     CreateMessageBatchParams, ListMessageBatchesParams, ListMessageBatchesResponse, MessageBatch,
-    MessageBatchClient, MessageBatchError,
+    MessageBatchClient, MessageBatchError, RetrieveMessageBatchParams,
+    RetrieveMessageBatchResponse,
 };
 use async_trait::async_trait;
 
@@ -91,7 +92,7 @@ impl MessageBatchClient for AnthropicClient {
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
     /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
-    /// let batches = client.list_message_batches().await?;
+    /// let batches = client.list_message_batches(None).await?;
     /// println!("Batches: {:?}", batches);
     /// # Ok(())
     /// # }
@@ -126,21 +127,21 @@ impl MessageBatchClient for AnthropicClient {
     ///
     /// ```no_run
     /// use anthropic_ai_sdk::clients::AnthropicClient;
-    /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError};
+    /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError, RetrieveMessageBatchParams};
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
     /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
-    /// let batch = client.retrieve_message_batch("batch_id").await?;
+    /// let batch = client.retrieve_message_batch(&RetrieveMessageBatchParams::new("batch_id")).await?;
     /// println!("Batch: {:?}", batch);
     /// # Ok(())
     /// # }
     /// ```
     async fn retrieve_message_batch<'a>(
         &'a self,
-        batch_id: &'a str,
-    ) -> Result<MessageBatch, MessageBatchError> {
-        self.get::<MessageBatch, (), MessageBatchError>(
-            &format!("/messages/batches/{}", batch_id),
+        params: &'a RetrieveMessageBatchParams,
+    ) -> Result<RetrieveMessageBatchResponse, MessageBatchError> {
+        self.get::<RetrieveMessageBatchResponse, RetrieveMessageBatchParams, MessageBatchError>(
+            &format!("/messages/batches/{}", params.id),
             None,
         )
         .await
