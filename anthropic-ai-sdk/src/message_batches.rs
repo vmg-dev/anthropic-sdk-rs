@@ -5,7 +5,8 @@
 
 use crate::clients::AnthropicClient;
 use crate::types::message_batches::{
-    CreateMessageBatchParams, MessageBatch, MessageBatchClient, MessageBatchError,
+    CreateMessageBatchParams, ListMessageBatchesParams, ListMessageBatchesResponse, MessageBatch,
+    MessageBatchClient, MessageBatchError,
 };
 use async_trait::async_trait;
 
@@ -65,5 +66,44 @@ impl MessageBatchClient for AnthropicClient {
         body: &'a CreateMessageBatchParams,
     ) -> Result<MessageBatch, MessageBatchError> {
         self.post("/messages/batches", Some(body)).await
+    }
+
+    /// List message batches
+    ///
+    /// List all message batches
+    ///
+    /// # Returns
+    ///
+    /// Returns a list of message batches
+    ///
+    /// # Errors
+    ///
+    /// Returns a `MessageBatchError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError};
+    ///
+    /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
+    /// let batches = client.list_message_batches().await?;
+    /// println!("Batches: {:?}", batches);
+    /// # Ok(())
+    /// # }
+    /// ```
+    async fn list_message_batches<'a>(
+        &'a self,
+        params: Option<&'a ListMessageBatchesParams>,
+    ) -> Result<ListMessageBatchesResponse, MessageBatchError> {
+        self.get::<ListMessageBatchesResponse, ListMessageBatchesParams, MessageBatchError>(
+            "/messages/batches",
+            params,
+        )
+        .await
     }
 }
