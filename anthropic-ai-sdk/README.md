@@ -58,7 +58,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
 
 - Modesl
   - [List Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/models/list-models/src/main.rs) - How to retrieve a list of available models
-  - [Get a Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/models/get-a-models/src/main.rs) - How to get a model
+  - [Get a Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/models/get-a-model/src/main.rs) - How to get a model
 - Messages
   - [Message](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/messages/messages/src/main.rs) - How to create a message
   - [Count Message Tokens](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/messages/count-message-tokens/src/main.rs) - How to count tokens in a message
