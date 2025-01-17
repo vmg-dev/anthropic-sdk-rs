@@ -1,12 +1,9 @@
 use anthropic_ai_sdk::clients::AnthropicClient;
 use anthropic_ai_sdk::types::message_batches::{
-    CreateMessageBatchParams, MessageBatch, MessageBatchClient, MessageBatchError,
+    CreateMessageBatchParams, Message, MessageBatchClient, MessageBatchError, MessageRequest,
 };
 use std::env;
 use tracing::{error, info};
-
-/// cd anthropic-sdk-rs/examples/messages
-/// cargo run
 
 #[tokio::main]
 async fn main() {
@@ -25,15 +22,15 @@ async fn main() {
 
     let client = AnthropicClient::new::<MessageBatchError>(api_key, api_version).unwrap();
 
-    let body = CreateMessageBatchParams {
-        requests: vec![MessageBatch::new_text(Role::User, "Hello, Claude")],
-    };
+    let messages = vec![Message::new("user", "Hello!")];
+    let request = MessageRequest::new("claude-3-haiku", messages, 100)
+        .with_custom_id("req1")
+        .with_system("You are a helpful assistant");
 
-    info!("body: {:?}", body);
-
-    match client.create_message_batch(&body).await {
-        Ok(message) => {
-            info!("Successfully created message batch: {:?}", message);
+    let batch_params = CreateMessageBatchParams::new(vec![request]);
+    match client.create_message_batch(&batch_params).await {
+        Ok(batch) => {
+            info!("Successfully created message batch: {:?}", batch);
         }
         Err(e) => {
             error!("Error: {}", e);
