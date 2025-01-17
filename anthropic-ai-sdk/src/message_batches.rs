@@ -106,4 +106,43 @@ impl MessageBatchClient for AnthropicClient {
         )
         .await
     }
+
+    /// Retrieve a message batch
+    ///
+    /// Retrieve a message batch by ID
+    ///
+    /// # Returns
+    ///
+    /// Returns a message batch
+    ///
+    /// # Errors
+    ///
+    /// Returns a `MessageBatchError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError};
+    ///
+    /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
+    /// let batch = client.retrieve_message_batch("batch_id").await?;
+    /// println!("Batch: {:?}", batch);
+    /// # Ok(())
+    /// # }
+    /// ```
+    async fn retrieve_message_batch<'a>(
+        &'a self,
+        batch_id: &'a str,
+    ) -> Result<MessageBatch, MessageBatchError> {
+        self.get::<MessageBatch, (), MessageBatchError>(
+            &format!("/messages/batches/{}", batch_id),
+            None,
+        )
+        .await
+    }
 }

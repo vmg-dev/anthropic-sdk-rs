@@ -40,6 +40,12 @@ pub trait MessageBatchClient {
         &'a self,
         params: Option<&'a ListMessageBatchesParams>,
     ) -> Result<ListMessageBatchesResponse, MessageBatchError>;
+
+    /// Retrieve a message batch
+    async fn retrieve_message_batch<'a>(
+        &'a self,
+        id: &'a str,
+    ) -> Result<MessageBatch, MessageBatchError>;
 }
 
 /// Processing status of a Message Batch
