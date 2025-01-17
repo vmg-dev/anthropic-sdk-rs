@@ -72,7 +72,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
   - [x] Messages
   - [x] Count Message Tokens
 - Message Batches
-  - [ ] Retrieve a Message Batch
+  - [x] Retrieve a Message Batch
   - [ ] Retrieve Message Batch Results
   - [ ] List Message Batches
   - [ ] Cancel a Message Batch
