@@ -43,8 +43,9 @@ pub struct RequestCounts {
     pub processing: u32,
     /// Number of successfully completed requests
     pub succeeded: u32,
-    /// Number of failed requests
-    pub failed: u32,
+    /// Number of errored requests
+    #[serde(rename = "errored")] // APIは "errored" を使用
+    pub failed: u32, // コード内では "failed" として扱う
     /// Number of canceled requests
     pub canceled: u32,
     /// Number of expired requests
@@ -95,6 +96,13 @@ pub struct MessageRequest {
     /// Custom identifier for tracking this request
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_id: Option<String>,
+    /// Request parameters
+    pub params: MessageRequestParams,
+}
+
+/// Parameters for an individual message request
+#[derive(Debug, Serialize)]
+pub struct MessageRequestParams {
     /// Model to use for this message
     pub model: String,
     /// Maximum number of tokens to generate
@@ -136,13 +144,10 @@ impl CreateMessageBatchParams {
 
 impl MessageRequest {
     /// Create a new MessageRequest
-    pub fn new(model: impl Into<String>, messages: Vec<Message>, max_tokens: u32) -> Self {
+    pub fn new(params: MessageRequestParams) -> Self {
         Self {
             custom_id: None,
-            model: model.into(),
-            max_tokens,
-            system: None,
-            messages,
+            params,
         }
     }
 
@@ -150,6 +155,18 @@ impl MessageRequest {
     pub fn with_custom_id(mut self, custom_id: impl Into<String>) -> Self {
         self.custom_id = Some(custom_id.into());
         self
+    }
+}
+
+impl MessageRequestParams {
+    /// Create a new MessageRequestParams
+    pub fn new(model: impl Into<String>, messages: Vec<Message>, max_tokens: u32) -> Self {
+        Self {
+            model: model.into(),
+            max_tokens,
+            system: None,
+            messages,
+        }
     }
 
     /// Set a system prompt for this request
