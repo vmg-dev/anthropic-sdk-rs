@@ -36,10 +36,11 @@ impl MessageBatchClient for AnthropicClient {
     ///
     /// ```no_run
     /// use anthropic_ai_sdk::clients::AnthropicClient;
-    /// use anthropic_ai_sdk::types::message_batches::{MessageBatchClient, MessageBatchError};
     /// use anthropic_ai_sdk::types::message_batches::{
-    ///     CreateMessageBatchParams, MessageBatch
+    ///     CreateMessageBatchParams, Message, MessageBatchClient, MessageBatchError, MessageRequest,
+    ///     MessageRequestParams,
     /// };
+    ///
     /// use tokio;
     ///
     /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -48,8 +49,12 @@ impl MessageBatchClient for AnthropicClient {
     ///     "2023-06-01",
     /// )?;
     ///
-    /// let params = CreateMessageBatchParams::default();
-    /// let response = client.create_message_batch(&params).await?;
+    /// let messages = vec![Message::new("user", "Hello!")];
+    /// let request_params = MessageRequestParams::new("claude-3-haiku", messages, 100)
+    ///     .with_system("You are a helpful assistant");
+    /// let request = MessageRequest::new(request_params).with_custom_id("req1");
+    /// let batch_params = CreateMessageBatchParams::new(vec![request]);
+    /// let response = client.create_message_batch(&batch_params).await?;
     ///
     /// println!("Response: {:?}", response);
     /// # Ok(())
