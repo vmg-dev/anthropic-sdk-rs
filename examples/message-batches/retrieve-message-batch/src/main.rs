@@ -23,7 +23,7 @@ async fn main() {
     let client = AnthropicClient::new::<MessageBatchError>(api_key, api_version).unwrap();
 
     match client
-        .retrieve_message_batch(&RetrieveMessageBatchParams::new("batch_id"))
+        .retrieve_message_batch(&RetrieveMessageBatchParams::new("msgbatch_batch_id"))
         .await
     {
         Ok(batches) => {
