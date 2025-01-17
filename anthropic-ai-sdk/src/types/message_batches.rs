@@ -44,8 +44,7 @@ pub struct RequestCounts {
     /// Number of successfully completed requests
     pub succeeded: u32,
     /// Number of errored requests
-    #[serde(rename = "errored")] // APIは "errored" を使用
-    pub failed: u32, // コード内では "failed" として扱う
+    pub errored: u32,
     /// Number of canceled requests
     pub canceled: u32,
     /// Number of expired requests
