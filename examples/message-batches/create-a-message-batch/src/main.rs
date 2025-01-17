@@ -1,6 +1,7 @@
 use anthropic_ai_sdk::clients::AnthropicClient;
 use anthropic_ai_sdk::types::message_batches::{
     CreateMessageBatchParams, Message, MessageBatchClient, MessageBatchError, MessageRequest,
+    MessageRequestParams,
 };
 use std::env;
 use tracing::{error, info};
@@ -23,9 +24,10 @@ async fn main() {
     let client = AnthropicClient::new::<MessageBatchError>(api_key, api_version).unwrap();
 
     let messages = vec![Message::new("user", "Hello!")];
-    let request = MessageRequest::new("claude-3-haiku", messages, 100)
-        .with_custom_id("req1")
+    let request_params = MessageRequestParams::new("claude-3-haiku", messages, 100)
         .with_system("You are a helpful assistant");
+
+    let request = MessageRequest::new(request_params).with_custom_id("req1");
 
     let batch_params = CreateMessageBatchParams::new(vec![request]);
     match client.create_message_batch(&batch_params).await {
