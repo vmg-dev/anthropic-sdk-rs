@@ -57,11 +57,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/examples) directory for more usage examples:
 
 - Modesl
-  - [List Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/models/list-models/src/main.rs) - How to list available models
+  - [List Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/models/list-models/src/main.rs) - How to retrieve a list of available models
   - [Get a Models](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/models/get-a-models/src/main.rs) - How to get a model
 - Messages
   - [Message](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/messages/messages/src/main.rs) - How to create a message
   - [Count Message Tokens](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/messages/count-message-tokens/src/main.rs) - How to count tokens in a message
+- Message Batch
+  - [Create a Message Batch](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/message-batches/create-a-message-batch/src/main.rs) - How to create a message batch
+  - [List Message Batches](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/message-batches/list-message-batches/src/main.rs) - How to retrieve a list of message batches
 
 ## API Coverage
 
@@ -74,7 +77,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
 - Message Batches
   - [x] Retrieve a Message Batch
   - [ ] Retrieve Message Batch Results
-  - [ ] List Message Batches
+  - [x] List Message Batches
   - [ ] Cancel a Message Batch
   - [ ] Delete a Message Batch
 - Admin API
