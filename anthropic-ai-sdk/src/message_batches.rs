@@ -59,6 +59,6 @@ impl MessageBatchClient for AnthropicClient {
         &'a self,
         body: &'a CreateMessageBatchParams,
     ) -> Result<MessageBatch, MessageBatchError> {
-        self.post("/messages/batch", Some(body)).await
+        self.post("/messages/batches", Some(body)).await
     }
 }
