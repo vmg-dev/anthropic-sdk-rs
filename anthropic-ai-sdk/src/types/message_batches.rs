@@ -27,6 +27,21 @@ impl From<String> for MessageBatchError {
     }
 }
 
+#[async_trait]
+pub trait MessageBatchClient {
+    /// Create a new message batch
+    async fn create_message_batch<'a>(
+        &'a self,
+        params: &'a CreateMessageBatchParams,
+    ) -> Result<MessageBatch, MessageBatchError>;
+
+    /// List message batches
+    async fn list_message_batches<'a>(
+        &'a self,
+        params: Option<&'a ListMessageBatchesParams>,
+    ) -> Result<ListMessageBatchesResponse, MessageBatchError>;
+}
+
 /// Processing status of a Message Batch
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -120,21 +135,6 @@ pub struct Message {
     pub role: String,
     /// Content of the message
     pub content: String,
-}
-
-#[async_trait]
-pub trait MessageBatchClient {
-    /// Create a new message batch
-    async fn create_message_batch<'a>(
-        &'a self,
-        params: &'a CreateMessageBatchParams,
-    ) -> Result<MessageBatch, MessageBatchError>;
-
-    /// List message batches
-    async fn list_message_batches<'a>(
-        &'a self,
-        params: Option<&'a ListMessageBatchesParams>,
-    ) -> Result<ListMessageBatchesResponse, MessageBatchError>;
 }
 
 impl CreateMessageBatchParams {
