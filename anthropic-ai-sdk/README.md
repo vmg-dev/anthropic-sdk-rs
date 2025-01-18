@@ -8,10 +8,6 @@ An unofficial Rust SDK for the [Anthropic API](https://docs.anthropic.com/claude
 
 ## Features
 
-- Complete Anthropic API support
-  - Models API (List and Get models)
-  - Messages API (Create messages and count tokens)
-  - Message Batches API (Create and List batches)
 - Robust async/await implementation using Tokio
 - Comprehensive error handling with detailed error types
 - Built-in pagination support for list operations
