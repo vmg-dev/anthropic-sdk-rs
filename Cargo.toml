@@ -8,6 +8,7 @@ members = [
     "examples/message-batches/create-a-message-batch",
     "examples/message-batches/list-message-batches",
     "examples/message-batches/retrieve-message-batch",
+    "examples/message-batches/retrieve-message-batch-results",
     ]
 default-members = ["anthropic-ai-sdk"]
 resolver = "2"
