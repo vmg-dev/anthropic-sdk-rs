@@ -141,7 +141,7 @@ impl MessageBatchClient for AnthropicClient {
         params: &'a RetrieveMessageBatchParams,
     ) -> Result<RetrieveMessageBatchResponse, MessageBatchError> {
         self.get::<RetrieveMessageBatchResponse, RetrieveMessageBatchParams, MessageBatchError>(
-            &format!("/messages/batches/{}", params.id),
+            &format!("/messages/batches/{}", params.message_batch_id),
             None,
         )
         .await

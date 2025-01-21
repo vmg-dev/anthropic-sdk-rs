@@ -46,6 +46,11 @@ pub trait MessageBatchClient {
         &'a self,
         params: &'a RetrieveMessageBatchParams,
     ) -> Result<RetrieveMessageBatchResponse, MessageBatchError>;
+
+    async fn retrieve_message_batch_results<'a>(
+        &'a self,
+        params: &'a RetrieveMessageBatchResultsParams,
+    ) -> Result<RetrieveMessageBatchResultsResponse, MessageBatchError>;
 }
 
 /// Processing status of a Message Batch
@@ -253,15 +258,82 @@ impl ListMessageBatchesParams {
 #[derive(Debug, Serialize)]
 pub struct RetrieveMessageBatchParams {
     /// ID of the message batch to retrieve
-    pub id: String,
+    pub message_batch_id: String,
 }
 
 impl RetrieveMessageBatchParams {
     /// Create a new RetrieveMessageBatchParams
-    pub fn new(id: impl Into<String>) -> Self {
-        Self { id: id.into() }
+    pub fn new(message_batch_id: impl Into<String>) -> Self {
+        Self {
+            message_batch_id: message_batch_id.into(),
+        }
     }
+}
+
+#[derive(Debug, Serialize)]
+pub struct RetrieveMessageBatchResultsParams {
+    /// ID of the message batch to retrieve
+    pub message_batch_id: String,
 }
 
 /// Response type for retrieving a message batch
 pub type RetrieveMessageBatchResponse = MessageBatch;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MessageBatchResult {
+    /// Custom identifier provided in the original request
+    pub custom_id: String,
+    /// Result of the message request
+    pub result: BatchRequestResult,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BatchRequestResult {
+    /// Type of result (e.g., "succeeded")
+    #[serde(rename = "type")]
+    pub type_: String,
+    /// The resulting message if successful
+    pub message: MessageResponse,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MessageResponse {
+    /// Unique identifier for the message
+    pub id: String,
+    /// Type of the response (always "message")
+    #[serde(rename = "type")]
+    pub type_: String,
+    /// Role of the message (e.g., "assistant")
+    pub role: String,
+    /// Model used for generation
+    pub model: String,
+    /// Content of the message
+    pub content: Vec<MessageContent>,
+    /// Reason for stopping generation
+    pub stop_reason: String,
+    /// Sequence that caused the stop
+    pub stop_sequence: Option<String>,
+    /// Token usage statistics
+    pub usage: TokenUsage,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MessageContent {
+    /// Type of content (e.g., "text")
+    #[serde(rename = "type")]
+    pub type_: String,
+    /// The actual text content
+    pub text: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TokenUsage {
+    /// Number of tokens in the input
+    pub input_tokens: u32,
+    /// Number of tokens in the output
+    pub output_tokens: u32,
+}
+
+/// Response type for retrieving message batch results
+/// This will be a stream of MessageBatchResult objects, one per line
+pub type RetrieveMessageBatchResultsResponse = Vec<MessageBatchResult>;
