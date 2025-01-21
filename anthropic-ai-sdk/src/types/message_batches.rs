@@ -276,6 +276,15 @@ pub struct RetrieveMessageBatchResultsParams {
     pub message_batch_id: String,
 }
 
+impl RetrieveMessageBatchResultsParams {
+    /// Create a new RetrieveMessageBatchResultsParams
+    pub fn new(message_batch_id: impl Into<String>) -> Self {
+        Self {
+            message_batch_id: message_batch_id.into(),
+        }
+    }
+}
+
 /// Response type for retrieving a message batch
 pub type RetrieveMessageBatchResponse = MessageBatch;
 

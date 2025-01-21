@@ -7,7 +7,8 @@ use crate::clients::AnthropicClient;
 use crate::types::message_batches::{
     CreateMessageBatchParams, ListMessageBatchesParams, ListMessageBatchesResponse, MessageBatch,
     MessageBatchClient, MessageBatchError, RetrieveMessageBatchParams,
-    RetrieveMessageBatchResponse,
+    RetrieveMessageBatchResponse, RetrieveMessageBatchResultsParams,
+    RetrieveMessageBatchResultsResponse,
 };
 use async_trait::async_trait;
 
@@ -142,6 +143,45 @@ impl MessageBatchClient for AnthropicClient {
     ) -> Result<RetrieveMessageBatchResponse, MessageBatchError> {
         self.get::<RetrieveMessageBatchResponse, RetrieveMessageBatchParams, MessageBatchError>(
             &format!("/messages/batches/{}", params.message_batch_id),
+            None,
+        )
+        .await
+    }
+
+    /// Retrieve message batch results
+    ///
+    /// Retrieve message batch results by ID
+    ///
+    /// # Returns
+    ///
+    /// Returns a message batch results
+    ///
+    /// # Errors
+    ///
+    /// Returns a `MessageBatchError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError, RetrieveMessageBatchResultsParams};
+    ///
+    /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
+    /// let results = client.retrieve_message_batch_results(&RetrieveMessageBatchResultsParams::new("msgbatch_batch_id")).await?;
+    /// println!("Results: {:?}", results);
+    /// # Ok(())
+    /// # }
+    /// ```
+    async fn retrieve_message_batch_results<'a>(
+        &'a self,
+        params: &'a RetrieveMessageBatchResultsParams,
+    ) -> Result<RetrieveMessageBatchResultsResponse, MessageBatchError> {
+        self.get::<RetrieveMessageBatchResultsResponse, RetrieveMessageBatchResultsParams, MessageBatchError>(
+            &format!("/messages/batches/{}/results", params.message_batch_id),
             None,
         )
         .await
