@@ -24,7 +24,7 @@ async fn main() {
 
     match client
         .retrieve_message_batch_results(&RetrieveMessageBatchResultsParams::new(
-            "msgbatch_01HkcTjaV5uDC8jWR4ZsDV8d",
+            "msgbatch_batch_id",
         ))
         .await
     {
