@@ -7,7 +7,6 @@ use reqwest::{header, Client as ReqwestClient};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::error::Error as StdError;
-use tracing::info;
 
 /// Base URL for the Anthropic API
 const API_BASE_URL: &str = "https://api.anthropic.com/v1";
@@ -121,41 +120,31 @@ impl AnthropicClient {
         E: StdError + From<String>,
     {
         let url = format!("{}{}", API_BASE_URL, path);
-        info!("url: {}", url);
 
         let mut request = self
             .client
             .request(method, &url)
             .header("x-api-key", &self.api_key);
 
-        info!("request: {:?}", request);
-
         // Add query parameters if provided
         if let Some(q) = query {
-            info!("start adding query");
             request = request.query(q);
         }
 
         // Add request body if provided
         if let Some(b) = body {
-            info!("start serializing body");
             let json = serde_json::to_string_pretty(b)
                 .map_err(|e| E::from(format!("Failed to serialize body: {}", e)))?;
-            info!("Request body JSON: {}", json);
             request = request.json(b);
         }
 
         let response = request.send().await.map_err(|e| E::from(e.to_string()))?;
-        info!("response: {:?}", response);
 
         let status = response.status();
         let body = response
             .text()
             .await
             .map_err(|e| E::from(format!("Failed to get response body: {}", e)))?;
-
-        info!("Response status: {}", status);
-        info!("Response body: {}", body);
 
         if !status.is_success() {
             return Err(E::from(body));
