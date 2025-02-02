@@ -133,7 +133,7 @@ impl AnthropicClient {
 
         // Add request body if provided
         if let Some(b) = body {
-            let json = serde_json::to_string_pretty(b)
+            let _json = serde_json::to_string_pretty(b)
                 .map_err(|e| E::from(format!("Failed to serialize body: {}", e)))?;
             request = request.json(b);
         }
