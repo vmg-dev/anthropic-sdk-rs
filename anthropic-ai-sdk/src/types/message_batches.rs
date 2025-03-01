@@ -51,6 +51,12 @@ pub trait MessageBatchClient {
         &'a self,
         params: &'a RetrieveMessageBatchResultsParams,
     ) -> Result<RetrieveMessageBatchResultsResponse, MessageBatchError>;
+
+    /// Cancel a message batch
+    async fn cancel_message_batch<'a>(
+        &'a self,
+        params: &'a CancelMessageBatchParams,
+    ) -> Result<CancelResponse, MessageBatchError>;
 }
 
 /// Processing status of a Message Batch
@@ -346,3 +352,25 @@ pub struct TokenUsage {
 /// Response type for retrieving message batch results
 /// This will be a stream of MessageBatchResult objects, one per line
 pub type RetrieveMessageBatchResultsResponse = Vec<MessageBatchResult>;
+
+#[derive(Debug, Serialize)]
+pub struct CancelMessageBatchParams {
+    /// ID of the message batch to cancel
+    pub message_batch_id: String,
+}
+
+/// Response type for cancelling a message batch
+#[derive(Debug, Deserialize)]
+pub struct CancelResponse {
+    pub id: String,
+    #[serde(rename = "type")]
+    pub obj_type: String,
+    pub processing_status: String,
+    pub request_counts: serde_json::Value,
+    pub ended_at: Option<String>,
+    pub created_at: String,
+    pub expires_at: String,
+    pub archived_at: Option<String>,
+    pub cancel_initiated_at: Option<String>,
+    pub results_url: Option<String>,
+}

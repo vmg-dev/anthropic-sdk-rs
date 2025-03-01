@@ -5,9 +5,9 @@
 
 use crate::clients::AnthropicClient;
 use crate::types::message_batches::{
-    CreateMessageBatchParams, ListMessageBatchesParams, ListMessageBatchesResponse, MessageBatch,
-    MessageBatchClient, MessageBatchError, RetrieveMessageBatchParams,
-    RetrieveMessageBatchResponse, RetrieveMessageBatchResultsParams,
+    CancelMessageBatchParams, CancelResponse, CreateMessageBatchParams, ListMessageBatchesParams,
+    ListMessageBatchesResponse, MessageBatch, MessageBatchClient, MessageBatchError,
+    RetrieveMessageBatchParams, RetrieveMessageBatchResponse, RetrieveMessageBatchResultsParams,
     RetrieveMessageBatchResultsResponse,
 };
 use async_trait::async_trait;
@@ -183,6 +183,20 @@ impl MessageBatchClient for AnthropicClient {
         self.get::<RetrieveMessageBatchResultsResponse, RetrieveMessageBatchResultsParams, MessageBatchError>(
             &format!("/messages/batches/{}/results", params.message_batch_id),
             None,
+        )
+        .await
+    }
+
+    /// Cancel a message batch
+    ///
+    /// Cancels a message batch by ID
+    async fn cancel_message_batch<'a>(
+        &'a self,
+        params: &'a CancelMessageBatchParams,
+    ) -> Result<CancelResponse, MessageBatchError> {
+        self.post::<CancelResponse, CancelMessageBatchParams, MessageBatchError>(
+            &format!("/messages/batches/{}/cancel", params.message_batch_id),
+            Some(params),
         )
         .await
     }
