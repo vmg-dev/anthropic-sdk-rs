@@ -353,10 +353,17 @@ pub struct TokenUsage {
 /// This will be a stream of MessageBatchResult objects, one per line
 pub type RetrieveMessageBatchResultsResponse = Vec<MessageBatchResult>;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CancelMessageBatchParams {
-    /// ID of the message batch to cancel
     pub message_batch_id: String,
+}
+
+impl CancelMessageBatchParams {
+    pub fn new(message_batch_id: impl Into<String>) -> Self {
+        Self {
+            message_batch_id: message_batch_id.into(),
+        }
+    }
 }
 
 /// Response type for cancelling a message batch
