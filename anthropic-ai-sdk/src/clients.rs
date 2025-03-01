@@ -3,9 +3,9 @@
 //! This module provides the main client for interacting with the Anthropic API.
 //! It handles authentication, request construction, and response parsing.
 
-use reqwest::{header, Client as ReqwestClient};
-use serde::de::DeserializeOwned;
+use reqwest::{Client as ReqwestClient, header};
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
 
 /// Base URL for the Anthropic API
@@ -200,6 +200,28 @@ impl AnthropicClient {
         E: StdError + From<String>,
     {
         self.send_request::<T, (), B, E>(reqwest::Method::POST, path, None, body)
+            .await
+    }
+
+    /// Sends a DELETE request to the specified endpoint.
+    ///
+    /// # Type Parameters
+    ///
+    /// * `T` - The expected response type
+    /// * `Q` - The query parameters type
+    /// * `E` - The error type
+    ///
+    /// # Arguments
+    ///
+    /// * `path` - The API endpoint path
+    /// * `query` - Optional query parameters
+    pub(crate) async fn delete<T, Q, E>(&self, path: &str, query: Option<&Q>) -> Result<T, E>
+    where
+        T: DeserializeOwned,
+        Q: Serialize + ?Sized,
+        E: StdError + From<String>,
+    {
+        self.send_request::<T, Q, (), E>(reqwest::Method::DELETE, path, query, None)
             .await
     }
 }
