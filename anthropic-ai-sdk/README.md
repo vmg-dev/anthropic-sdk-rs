@@ -81,7 +81,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
   - [x] Retrieve a Message Batch
   - [x] Retrieve Message Batch Results
   - [x] List Message Batches
-  - [ ] Cancel a Message Batch
+  - [x] Cancel a Message Batch
   - [ ] Delete a Message Batch
 - Admin API
   - Organization Member Management
