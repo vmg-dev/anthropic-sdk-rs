@@ -5,8 +5,8 @@
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use time::serde::rfc3339;
 use time::OffsetDateTime;
+use time::serde::rfc3339;
 
 /// Error types for the Message Batches API
 #[derive(Debug, Error)]
@@ -57,6 +57,15 @@ pub trait MessageBatchClient {
         &'a self,
         params: &'a CancelMessageBatchParams,
     ) -> Result<CancelResponse, MessageBatchError>;
+
+    /// Delete a message batch.
+    ///
+    /// Message batches can only be deleted once they’ve finished processing.
+    /// If you’d like to delete an in-progress batch, you must first cancel it.
+    async fn delete_message_batch<'a>(
+        &'a self,
+        params: &'a DeleteMessageBatchParams,
+    ) -> Result<DeleteResponse, MessageBatchError>;
 }
 
 /// Processing status of a Message Batch
@@ -380,4 +389,30 @@ pub struct CancelResponse {
     pub archived_at: Option<String>,
     pub cancel_initiated_at: Option<String>,
     pub results_url: Option<String>,
+}
+
+/// Parameters for deleting a message batch
+#[derive(Debug, Serialize)]
+pub struct DeleteMessageBatchParams {
+    /// ID of the message batch to delete
+    pub message_batch_id: String,
+}
+
+impl DeleteMessageBatchParams {
+    /// Create a new DeleteMessageBatchParams
+    pub fn new(message_batch_id: impl Into<String>) -> Self {
+        Self {
+            message_batch_id: message_batch_id.into(),
+        }
+    }
+}
+
+/// Response type for deleting a message batch
+#[derive(Debug, Deserialize)]
+pub struct DeleteResponse {
+    /// Unique identifier for the deleted message batch
+    pub id: String,
+    /// Object type (always "message_batch_deleted")
+    #[serde(rename = "type")]
+    pub obj_type: String,
 }

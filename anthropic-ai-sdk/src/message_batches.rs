@@ -5,9 +5,10 @@
 
 use crate::clients::AnthropicClient;
 use crate::types::message_batches::{
-    CancelMessageBatchParams, CancelResponse, CreateMessageBatchParams, ListMessageBatchesParams,
-    ListMessageBatchesResponse, MessageBatch, MessageBatchClient, MessageBatchError,
-    RetrieveMessageBatchParams, RetrieveMessageBatchResponse, RetrieveMessageBatchResultsParams,
+    CancelMessageBatchParams, CancelResponse, CreateMessageBatchParams, DeleteMessageBatchParams,
+    DeleteResponse, ListMessageBatchesParams, ListMessageBatchesResponse, MessageBatch,
+    MessageBatchClient, MessageBatchError, RetrieveMessageBatchParams,
+    RetrieveMessageBatchResponse, RetrieveMessageBatchResultsParams,
     RetrieveMessageBatchResultsResponse,
 };
 use async_trait::async_trait;
@@ -197,6 +198,20 @@ impl MessageBatchClient for AnthropicClient {
         self.post::<CancelResponse, CancelMessageBatchParams, MessageBatchError>(
             &format!("/messages/batches/{}/cancel", params.message_batch_id),
             Some(params),
+        )
+        .await
+    }
+
+    /// Delete a message batch
+    ///
+    /// Delete a message batch by ID
+    async fn delete_message_batch<'a>(
+        &'a self,
+        params: &'a DeleteMessageBatchParams,
+    ) -> Result<DeleteResponse, MessageBatchError> {
+        self.delete::<DeleteResponse, DeleteMessageBatchParams, MessageBatchError>(
+            &format!("/messages/batches/{}", params.message_batch_id),
+            None,
         )
         .await
     }
