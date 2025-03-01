@@ -230,6 +230,31 @@ impl MessageBatchClient for AnthropicClient {
     /// Delete a message batch
     ///
     /// Delete a message batch by ID
+    ///
+    /// # Returns
+    ///
+    /// Returns a delete response
+    ///
+    /// # Errors
+    ///
+    /// Returns a `MessageBatchError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message_batches::{DeleteMessageBatchParams, MessageBatchClient, MessageBatchError};
+    ///
+    /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
+    /// let response = client.delete_message_batch(&DeleteMessageBatchParams::new("batch_id")).await?;
+    /// println!("Response: {:?}", response);
+    /// # Ok(())
+    /// # }
+    /// ```
     async fn delete_message_batch<'a>(
         &'a self,
         params: &'a DeleteMessageBatchParams,
