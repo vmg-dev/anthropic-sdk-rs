@@ -66,7 +66,8 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
   - [Count Message Tokens](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/messages/count-message-tokens/src/main.rs) - How to count tokens in a message
 - Message Batch
   - [Create a Message Batch](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/message-batches/create-a-message-batch/src/main.rs) - How to create a message batch
-  - [List Message Batches](https://github.com/e-bebe/anthropic-sdk-rs/blob/main/examples/message-batches/list-message-batches/src/main.rs) - How to retrieve a list of message batches
+
+> **Note:** The examples listed above are only a subset. For additional detailed usage examples, please refer to the [examples directory](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/examples).
 
 ## API Coverage
 
@@ -82,7 +83,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
   - [x] Retrieve Message Batch Results
   - [x] List Message Batches
   - [x] Cancel a Message Batch
-  - [ ] Delete a Message Batch
+  - [x] Delete a Message Batch
 - Admin API
   - Organization Member Management
     - [ ] Get User
