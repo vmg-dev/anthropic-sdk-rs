@@ -191,6 +191,31 @@ impl MessageBatchClient for AnthropicClient {
     /// Cancel a message batch
     ///
     /// Cancels a message batch by ID
+    ///
+    /// # Returns
+    ///
+    /// Returns a cancel response
+    ///
+    /// # Errors
+    ///
+    /// Returns a `MessageBatchError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::types::message_batches::{CancelMessageBatchParams, MessageBatchClient, MessageBatchError};
+    ///
+    /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let client = AnthropicClient::new::<MessageBatchError>("your-api-key", "2023-06-01")?;
+    /// let response = client.cancel_message_batch(&CancelMessageBatchParams::new("batch_id")).await?;
+    /// println!("Response: {:?}", response);
+    /// # Ok(())
+    /// # }
+    /// ```
     async fn cancel_message_batch<'a>(
         &'a self,
         params: &'a CancelMessageBatchParams,
