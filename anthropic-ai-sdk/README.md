@@ -115,7 +115,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
 
 ### Prerequisites
 
-- Rust 1.81 or later
+- Rust 1.85.0 or later
 - An Anthropic API key
 
 ### Running Tests
