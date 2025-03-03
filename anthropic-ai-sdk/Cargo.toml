@@ -1,13 +1,13 @@
 [package]
 name = "anthropic-ai-sdk"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["Katsuhiro Honda<freewave3@gmail.com>"]
 categories = ["api-bindings"]
 description = "An unofficial Rust SDK for Anthropic's Claude AI API"
 keywords = ["anthropic", "sdk", "ai"]
 license = "MIT"
-repository = "https://github.com/e-bebe/anthropic-sdk-rs/tree/main/anthropic-ai-sdk"
+repository = "https://github.com/katsuhirohonda/anthropic-sdk-rs/tree/main/anthropic-ai-sdk"
 rust-version = "1.85.0"
 
 [dependencies]
