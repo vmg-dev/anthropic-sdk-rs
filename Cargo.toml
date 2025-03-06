@@ -3,6 +3,7 @@ members = [
     "anthropic-ai-sdk",
     "examples/messages/count-message-tokens",
     "examples/messages/messages",
+    "examples/messages/stream-messages",
     "examples/models/list-models",
     "examples/models/get-a-model",
     "examples/message-batches/create-a-message-batch",
