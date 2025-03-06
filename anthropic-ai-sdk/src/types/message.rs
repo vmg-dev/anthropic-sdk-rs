@@ -1,4 +1,6 @@
 use async_trait::async_trait;
+use futures_util::StreamExt;
+use futures_util::stream::StreamExt as FuturesStreamExt;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -28,6 +30,14 @@ pub trait MessageClient {
         &'a self,
         params: Option<&'a CountMessageTokensParams>,
     ) -> Result<CountMessageTokensResponse, MessageError>;
+
+    async fn create_message_streaming<'a>(
+        &'a self,
+        body: &'a CreateMessageParams,
+    ) -> Result<
+        impl futures_util::Stream<Item = Result<StreamEvent, MessageError>> + 'a,
+        MessageError,
+    >;
 }
 
 #[derive(Debug)]
@@ -332,4 +342,73 @@ pub struct CountMessageTokensParams {
 #[derive(Debug, Deserialize)]
 pub struct CountMessageTokensResponse {
     pub input_tokens: u32,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "type")]
+pub enum StreamEvent {
+    #[serde(rename = "message_start")]
+    MessageStart { message: MessageStartContent },
+    #[serde(rename = "content_block_start")]
+    ContentBlockStart {
+        index: usize,
+        content_block: ContentBlock,
+    },
+    #[serde(rename = "content_block_delta")]
+    ContentBlockDelta {
+        index: usize,
+        delta: ContentBlockDelta,
+    },
+    #[serde(rename = "content_block_stop")]
+    ContentBlockStop { index: usize },
+    #[serde(rename = "message_delta")]
+    MessageDelta {
+        delta: MessageDeltaContent,
+        usage: Option<Usage>,
+    },
+    #[serde(rename = "message_stop")]
+    MessageStop,
+    #[serde(rename = "ping")]
+    Ping,
+    #[serde(rename = "error")]
+    Error { error: StreamError },
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MessageStartContent {
+    pub id: String,
+    #[serde(rename = "type")]
+    pub type_: String,
+    pub role: Role,
+    pub content: Vec<ContentBlock>,
+    pub model: String,
+    pub stop_reason: Option<StopReason>,
+    pub stop_sequence: Option<String>,
+    pub usage: Usage,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "type")]
+pub enum ContentBlockDelta {
+    #[serde(rename = "text_delta")]
+    TextDelta { text: String },
+    #[serde(rename = "input_json_delta")]
+    InputJsonDelta { partial_json: String },
+    #[serde(rename = "thinking_delta")]
+    ThinkingDelta { thinking: String },
+    #[serde(rename = "signature_delta")]
+    SignatureDelta { signature: String },
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MessageDeltaContent {
+    pub stop_reason: Option<StopReason>,
+    pub stop_sequence: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct StreamError {
+    #[serde(rename = "type")]
+    pub type_: String,
+    pub message: String,
 }
