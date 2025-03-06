@@ -41,6 +41,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         max_tokens: 1024,
     });
 
+    // Or with some optional parameters
+    // let params_with_options = CreateMessageParams::new(RequiredMessageParams {
+    //     model: "claude-3-5-sonnet-20240620".to_string(),
+    //     messages: vec![Message::new_text(Role::User, "Hello, Claude")],
+    //     max_tokens: 1024,
+    // })
+    // .with_temperature(0.7)
+    // .with_stream(true)
+    // .with_system("You are a helpful assistant");
+
     match client.create_message(Some(&body)).await {
         Ok(message) => {
             println!("Successfully created message: {:?}", message.content);

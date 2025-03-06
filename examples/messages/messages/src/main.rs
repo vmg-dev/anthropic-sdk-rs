@@ -35,6 +35,7 @@ async fn main() {
     //     max_tokens: 1024,
     // })
     // .with_temperature(0.7)
+    // .with_stream(true)
     // .with_system("You are a helpful assistant");
 
     info!("body: {:?}", body);
