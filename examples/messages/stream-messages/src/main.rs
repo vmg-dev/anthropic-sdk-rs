@@ -2,6 +2,7 @@ use anthropic_ai_sdk::clients::AnthropicClient;
 use anthropic_ai_sdk::types::message::{
     CreateMessageParams, Message, MessageClient, MessageError, RequiredMessageParams, Role,
 };
+use futures_util::StreamExt;
 use std::env;
 use tracing::{error, info};
 
@@ -31,9 +32,14 @@ async fn main() {
 
     info!("body: {:?}", body);
 
-    match client.create_message(Some(&body)).await {
-        Ok(message) => {
-            info!("Successfully created message: {:?}", message.content);
+    match client.create_message_streaming(&body).await {
+        Ok(mut stream) => {
+            while let Some(result) = stream.next().await {
+                match result {
+                    Ok(event) => info!("Received event: {:?}", event),
+                    Err(e) => error!("Stream error: {}", e),
+                }
+            }
         }
         Err(e) => {
             error!("Error: {}", e);
