@@ -109,12 +109,21 @@ impl MessageClient for AnthropicClient {
         self.post("/messages/count_tokens", body).await
     }
 
-    // Updated implementation for create_message_streaming function that fixes the into_async_read error
-
-    // This is the implementation from your paste.txt file,
-    // but with some modifications to make it work with your codebase.
-
     /// Creates a message with streaming enabled
+    ///
+    /// # Arguments
+    ///
+    /// * `body` - Parameters for creating the message, including the model to use,
+    ///   the messages to send, and any additional options
+    ///
+    /// # Returns
+    ///
+    /// Returns a stream of events on success.
+    ///
+    /// # Errors
+    ///
+    /// Returns a `MessageError` if:
+    /// - The request fails to send
     async fn create_message_streaming<'a>(
         &'a self,
         body: &'a CreateMessageParams,
