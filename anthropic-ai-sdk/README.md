@@ -35,21 +35,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let anthropic_api_key = std::env::var("ANTHROPIC_API_KEY").unwrap();
     let client = AnthropicClient::new::<MessageError>(anthropic_api_key, "2023-06-01").unwrap();
 
+    // stream(false)
     let body = CreateMessageParams::new(RequiredMessageParams {
         model: "claude-3-5-sonnet-20240620".to_string(),
         messages: vec![Message::new_text(Role::User, "Hello, Claude")],
         max_tokens: 1024,
     });
-
-    // Or with some optional parameters
-    // let params_with_options = CreateMessageParams::new(RequiredMessageParams {
-    //     model: "claude-3-5-sonnet-20240620".to_string(),
-    //     messages: vec![Message::new_text(Role::User, "Hello, Claude")],
-    //     max_tokens: 1024,
-    // })
-    // .with_temperature(0.7)
-    // .with_stream(true)
-    // .with_system("You are a helpful assistant");
 
     match client.create_message(Some(&body)).await {
         Ok(message) => {
@@ -57,6 +48,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => {
             println!("Error: {}", e);
+        }
+    }
+
+    // stream(true)
+    let body = CreateMessageParams::new(RequiredMessageParams {
+        model: "claude-3-5-sonnet-20240620".to_string(),
+        messages: vec![Message::new_text(Role::User, "Hello, Claude")],
+        max_tokens: 1024,
+    })
+    .with_stream(true);
+
+    match client.create_message_streaming(&body).await {
+        Ok(mut stream) => {
+            while let Some(result) = stream.next().await {
+                match result {
+                    Ok(event) => info!("Received event: {:?}", event),
+                    Err(e) => error!("Stream error: {}", e),
+                }
+            }
+        }
+        Err(e) => {
+            error!("Error: {}", e);
         }
     }
 

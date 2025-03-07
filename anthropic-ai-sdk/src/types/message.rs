@@ -288,6 +288,15 @@ pub struct Usage {
     pub output_tokens: u32,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct StreamUsage {
+    /// Input tokens used (may be missing in some events)
+    #[serde(default)]
+    pub input_tokens: u32,
+    /// Output tokens used
+    pub output_tokens: u32,
+}
+
 impl Message {
     /// Create a new message with simple text content
     pub fn new_text(role: Role, text: impl Into<String>) -> Self {
@@ -362,7 +371,7 @@ pub enum StreamEvent {
     #[serde(rename = "message_delta")]
     MessageDelta {
         delta: MessageDeltaContent,
-        usage: Option<Usage>,
+        usage: Option<StreamUsage>,
     },
     #[serde(rename = "message_stop")]
     MessageStop,

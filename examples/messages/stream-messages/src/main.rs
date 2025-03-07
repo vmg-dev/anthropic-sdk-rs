@@ -30,8 +30,6 @@ async fn main() {
     })
     .with_stream(true);
 
-    info!("body: {:?}", body);
-
     match client.create_message_streaming(&body).await {
         Ok(mut stream) => {
             while let Some(result) = stream.next().await {
