@@ -148,7 +148,7 @@ impl CreateMessageParams {
 }
 
 /// Message in a conversation
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Message {
     /// Role of the message sender
     pub role: Role,
@@ -158,7 +158,7 @@ pub struct Message {
 }
 
 /// Role of a message sender
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     User,
@@ -166,7 +166,7 @@ pub enum Role {
 }
 
 /// Content of a message
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum MessageContent {
     /// Simple text content
@@ -176,7 +176,7 @@ pub enum MessageContent {
 }
 
 /// Content block in a message
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(tag = "type")]
 pub enum ContentBlock {
     /// Text content
@@ -201,7 +201,7 @@ pub enum ContentBlock {
 }
 
 /// Source of an image
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ImageSource {
     /// Type of image source
     #[serde(rename = "type")]
