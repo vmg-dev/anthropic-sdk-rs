@@ -1264,6 +1264,7 @@ name = "stream-messages"
 version = "0.1.0"
 dependencies = [
  "anthropic-ai-sdk",
+ "futures-util",
  "tokio",
  "tracing",
  "tracing-subscriber",
