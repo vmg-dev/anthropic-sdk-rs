@@ -39,12 +39,12 @@ pub struct AnthropicClient {
 }
 
 impl AnthropicClient {
-    pub fn get_client(self) -> ReqwestClient {
-        self.client
+    pub fn get_client(&self) -> &ReqwestClient {
+        &self.client
     }
 
-    pub fn get_api_key(self) -> String {
-        self.api_key
+    pub fn get_api_key(&self) -> &str {
+        &self.api_key
     }
 
     /// Creates a new Anthropic API client with the specified credentials

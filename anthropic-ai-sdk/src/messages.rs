@@ -3,10 +3,8 @@
 //! This module contains the implementations for the Anthropic Messages API endpoints.
 //! It provides functionality for creating messages and counting tokens.
 
-use futures_lite::io::BufReader;
+use eventsource_stream::Eventsource;
 use futures_util::Stream;
-use std::io;
-use tokio_util::io::StreamReader;
 
 use crate::clients::AnthropicClient;
 use crate::types::message::{
@@ -147,32 +145,22 @@ impl MessageClient for AnthropicClient {
             return Err(MessageError::ApiError(error_text));
         }
 
-        // Get the bytes stream and convert it to io::Read
+        // Get the bytes stream and convert it to EventSource stream
         let bytes_stream = response.bytes_stream();
-        let stream_reader = StreamReader::new(bytes_stream.map(|r| {
-            r.map(|bytes| bytes)
-                .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))
-        }));
-
-        // Decode SSE events
-        let sse_stream = async_sse::decode(BufReader::new(stream_reader));
+        let event_stream = bytes_stream.eventsource();
 
         // Map SSE events to our StreamEvent type
-        Ok(sse_stream.map(|event_result| match event_result {
-            Ok(event) => {
-                let data = event.data();
-                match serde_json::from_str::<StreamEvent>(data) {
-                    Ok(parsed_event) => Ok(parsed_event),
-                    Err(e) => Err(MessageError::ApiError(format!(
-                        "Failed to parse SSE event: {}. Event data: {}",
-                        e, data
-                    ))),
-                }
-            }
-            Err(e) => Err(MessageError::RequestFailed(format!(
-                "Error in SSE stream: {}",
-                e
-            ))),
+        Ok(event_stream.map(|event_result| {
+            event_result
+                .map_err(|e| MessageError::RequestFailed(e.to_string()))
+                .and_then(|event| {
+                    serde_json::from_str::<StreamEvent>(&event.data).map_err(|e| {
+                        MessageError::ApiError(format!(
+                            "Failed to parse SSE event: {}. Event data: {}",
+                            e, event.data
+                        ))
+                    })
+                })
         }))
     }
 }
