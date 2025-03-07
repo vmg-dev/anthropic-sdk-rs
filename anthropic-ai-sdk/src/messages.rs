@@ -5,6 +5,7 @@
 
 use eventsource_stream::Eventsource;
 use futures_util::Stream;
+use reqwest::header::HeaderValue;
 
 use crate::clients::AnthropicClient;
 use crate::types::message::{
@@ -130,7 +131,10 @@ impl MessageClient for AnthropicClient {
         let client = &self.get_client();
         let request = client
             .request(reqwest::Method::POST, &url)
-            .header("x-api-key", &self.get_api_key())
+            .header(
+                "x-api-key",
+                HeaderValue::from_str(self.get_api_key()).unwrap(),
+            )
             .json(body);
 
         let response = request
