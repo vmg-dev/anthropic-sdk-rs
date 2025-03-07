@@ -3,7 +3,8 @@
 //! This module contains the implementations for the Anthropic Messages API endpoints.
 //! It provides functionality for creating messages and counting tokens.
 
-use futures_util::{Stream, StreamExt};
+use futures_lite::io::BufReader;
+use futures_util::Stream;
 use std::io;
 use tokio_util::io::StreamReader;
 
@@ -13,7 +14,7 @@ use crate::types::message::{
     CreateMessageResponse, MessageClient, MessageError, StreamEvent,
 };
 use async_trait::async_trait;
-use futures_util::{StreamExt, TryStreamExt};
+use futures_util::StreamExt;
 
 use crate::clients::API_BASE_URL;
 
@@ -154,7 +155,7 @@ impl MessageClient for AnthropicClient {
         }));
 
         // Decode SSE events
-        let sse_stream = async_sse::decode(stream_reader);
+        let sse_stream = async_sse::decode(BufReader::new(stream_reader));
 
         // Map SSE events to our StreamEvent type
         Ok(sse_stream.map(|event_result| match event_result {
