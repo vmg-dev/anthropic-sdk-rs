@@ -3,6 +3,10 @@
 //! This module contains the implementations for the Anthropic Messages API endpoints.
 //! It provides functionality for creating messages and counting tokens.
 
+use futures_util::{Stream, StreamExt};
+use std::io;
+use tokio_util::io::StreamReader;
+
 use crate::clients::AnthropicClient;
 use crate::types::message::{
     CountMessageTokensParams, CountMessageTokensResponse, CreateMessageParams,
@@ -107,13 +111,14 @@ impl MessageClient for AnthropicClient {
 
     // Updated implementation for create_message_streaming function that fixes the into_async_read error
 
+    // This is the implementation from your paste.txt file,
+    // but with some modifications to make it work with your codebase.
+
+    /// Creates a message with streaming enabled
     async fn create_message_streaming<'a>(
         &'a self,
         body: &'a CreateMessageParams,
-    ) -> Result<
-        impl futures_util::Stream<Item = Result<StreamEvent, MessageError>> + 'a,
-        MessageError,
-    > {
+    ) -> Result<impl Stream<Item = Result<StreamEvent, MessageError>> + 'a, MessageError> {
         // Ensure that stream parameter is set to true
         if body.stream.is_none() || !body.stream.unwrap() {
             return Err(MessageError::ApiError(
@@ -141,50 +146,32 @@ impl MessageClient for AnthropicClient {
             return Err(MessageError::ApiError(error_text));
         }
 
-        // Create a stream from the response body that reads line by line
-        // This approach avoids using into_async_read which isn't available
-        let text_stream = response.text_stream();
+        // Get the bytes stream and convert it to io::Read
+        let bytes_stream = response.bytes_stream();
+        let stream_reader = StreamReader::new(bytes_stream.map(|r| {
+            r.map(|bytes| bytes)
+                .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))
+        }));
 
-        // Create a stream that processes each SSE event line
-        use futures_util::stream::StreamExt;
+        // Decode SSE events
+        let sse_stream = async_sse::decode(stream_reader);
 
-        let event_stream = text_stream
-            .map(|line_result| -> Result<Option<StreamEvent>, MessageError> {
-                let line = line_result.map_err(|e| MessageError::RequestFailed(e.to_string()))?;
-
-                // Skip empty lines
-                if line.trim().is_empty() {
-                    return Ok(None);
+        // Map SSE events to our StreamEvent type
+        Ok(sse_stream.map(|event_result| match event_result {
+            Ok(event) => {
+                let data = event.data();
+                match serde_json::from_str::<StreamEvent>(data) {
+                    Ok(parsed_event) => Ok(parsed_event),
+                    Err(e) => Err(MessageError::ApiError(format!(
+                        "Failed to parse SSE event: {}. Event data: {}",
+                        e, data
+                    ))),
                 }
-
-                // Skip the "event:" prefix lines
-                if line.starts_with("event:") {
-                    return Ok(None);
-                }
-
-                // Extract data from "data:" lines
-                if line.starts_with("data:") {
-                    let data = line["data:".len()..].trim();
-                    match serde_json::from_str::<StreamEvent>(data) {
-                        Ok(parsed_event) => Ok(Some(parsed_event)),
-                        Err(e) => Err(MessageError::ApiError(format!(
-                            "Failed to parse SSE event: {}. Event data: {}",
-                            e, data
-                        ))),
-                    }
-                } else {
-                    // Skip other lines
-                    Ok(None)
-                }
-            })
-            .filter_map(|result| async move {
-                match result {
-                    Ok(Some(event)) => Some(Ok(event)),
-                    Ok(None) => None,
-                    Err(e) => Some(Err(e)),
-                }
-            });
-
-        Ok(event_stream)
+            }
+            Err(e) => Err(MessageError::RequestFailed(format!(
+                "Error in SSE stream: {}",
+                e
+            ))),
+        }))
     }
 }
