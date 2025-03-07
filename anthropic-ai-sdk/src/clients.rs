@@ -9,7 +9,7 @@ use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
 
 /// Base URL for the Anthropic API
-const API_BASE_URL: &str = "https://api.anthropic.com/v1";
+pub const API_BASE_URL: &str = "https://api.anthropic.com/v1";
 
 /// Anthropic API client
 ///
@@ -39,6 +39,14 @@ pub struct AnthropicClient {
 }
 
 impl AnthropicClient {
+    pub fn get_client(self) -> ReqwestClient {
+        self.client
+    }
+
+    pub fn get_api_key(self) -> String {
+        self.api_key
+    }
+
     /// Creates a new Anthropic API client with the specified credentials
     ///
     /// # Arguments

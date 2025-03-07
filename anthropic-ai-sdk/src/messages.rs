@@ -6,9 +6,11 @@
 use crate::clients::AnthropicClient;
 use crate::types::message::{
     CountMessageTokensParams, CountMessageTokensResponse, CreateMessageParams,
-    CreateMessageResponse, MessageClient, MessageError,
+    CreateMessageResponse, MessageClient, MessageError, StreamEvent,
 };
 use async_trait::async_trait;
+
+use crate::clients::API_BASE_URL;
 
 #[async_trait]
 impl MessageClient for AnthropicClient {
@@ -100,5 +102,64 @@ impl MessageClient for AnthropicClient {
         body: Option<&'a CountMessageTokensParams>,
     ) -> Result<CountMessageTokensResponse, MessageError> {
         self.post("/messages/count_tokens", body).await
+    }
+
+    async fn create_message_streaming<'a>(
+        &'a self,
+        body: &'a CreateMessageParams,
+    ) -> Result<
+        impl futures_util::Stream<Item = Result<StreamEvent, MessageError>> + 'a,
+        MessageError,
+    > {
+        // Ensure that stream parameter is set to true
+        if body.stream.is_none() || !body.stream.unwrap() {
+            return Err(MessageError::ApiError(
+                "Stream parameter must be set to true for streaming".to_string(),
+            ));
+        }
+
+        let url = format!("{}/messages", API_BASE_URL);
+
+        let client = &self.get_client();
+        let request = client
+            .request(reqwest::Method::POST, &url)
+            .header("x-api-key", &self.get_api_key())
+            .json(body);
+
+        let response = request
+            .send()
+            .await
+            .map_err(|e| MessageError::RequestFailed(e.to_string()))?;
+
+        if !response.status().is_success() {
+            let error_text = response.text().await.map_err(|e| {
+                MessageError::RequestFailed(format!("Failed to read error response: {}", e))
+            })?;
+            return Err(MessageError::ApiError(error_text));
+        }
+
+        let stream = response
+            .bytes_stream()
+            .map_err(|e| MessageError::RequestFailed(e.to_string()))
+            .into_async_read();
+
+        let sse_stream = async_sse::decode(stream);
+
+        Ok(sse_stream.map(|event_result| match event_result {
+            Ok(event) => {
+                let data = event.data();
+                match serde_json::from_str::<StreamEvent>(data) {
+                    Ok(parsed_event) => Ok(parsed_event),
+                    Err(e) => Err(MessageError::ApiError(format!(
+                        "Failed to parse SSE event: {}. Event data: {}",
+                        e, data
+                    ))),
+                }
+            }
+            Err(e) => Err(MessageError::RequestFailed(format!(
+                "Error in SSE stream: {}",
+                e
+            ))),
+        }))
     }
 }
