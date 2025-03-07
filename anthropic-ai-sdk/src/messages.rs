@@ -9,6 +9,7 @@ use crate::types::message::{
     CreateMessageResponse, MessageClient, MessageError, StreamEvent,
 };
 use async_trait::async_trait;
+use futures_util::{StreamExt, TryStreamExt};
 
 use crate::clients::API_BASE_URL;
 
@@ -104,6 +105,8 @@ impl MessageClient for AnthropicClient {
         self.post("/messages/count_tokens", body).await
     }
 
+    // Updated implementation for create_message_streaming function that fixes the into_async_read error
+
     async fn create_message_streaming<'a>(
         &'a self,
         body: &'a CreateMessageParams,
@@ -138,28 +141,50 @@ impl MessageClient for AnthropicClient {
             return Err(MessageError::ApiError(error_text));
         }
 
-        let stream = response
-            .bytes_stream()
-            .map_err(|e| MessageError::RequestFailed(e.to_string()))
-            .into_async_read();
+        // Create a stream from the response body that reads line by line
+        // This approach avoids using into_async_read which isn't available
+        let text_stream = response.text_stream();
 
-        let sse_stream = async_sse::decode(stream);
+        // Create a stream that processes each SSE event line
+        use futures_util::stream::StreamExt;
 
-        Ok(sse_stream.map(|event_result| match event_result {
-            Ok(event) => {
-                let data = event.data();
-                match serde_json::from_str::<StreamEvent>(data) {
-                    Ok(parsed_event) => Ok(parsed_event),
-                    Err(e) => Err(MessageError::ApiError(format!(
-                        "Failed to parse SSE event: {}. Event data: {}",
-                        e, data
-                    ))),
+        let event_stream = text_stream
+            .map(|line_result| -> Result<Option<StreamEvent>, MessageError> {
+                let line = line_result.map_err(|e| MessageError::RequestFailed(e.to_string()))?;
+
+                // Skip empty lines
+                if line.trim().is_empty() {
+                    return Ok(None);
                 }
-            }
-            Err(e) => Err(MessageError::RequestFailed(format!(
-                "Error in SSE stream: {}",
-                e
-            ))),
-        }))
+
+                // Skip the "event:" prefix lines
+                if line.starts_with("event:") {
+                    return Ok(None);
+                }
+
+                // Extract data from "data:" lines
+                if line.starts_with("data:") {
+                    let data = line["data:".len()..].trim();
+                    match serde_json::from_str::<StreamEvent>(data) {
+                        Ok(parsed_event) => Ok(Some(parsed_event)),
+                        Err(e) => Err(MessageError::ApiError(format!(
+                            "Failed to parse SSE event: {}. Event data: {}",
+                            e, data
+                        ))),
+                    }
+                } else {
+                    // Skip other lines
+                    Ok(None)
+                }
+            })
+            .filter_map(|result| async move {
+                match result {
+                    Ok(Some(event)) => Some(Ok(event)),
+                    Ok(None) => None,
+                    Err(e) => Some(Err(e)),
+                }
+            });
+
+        Ok(event_stream)
     }
 }
