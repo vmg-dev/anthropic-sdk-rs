@@ -15,7 +15,7 @@ use crate::types::message::{
 use async_trait::async_trait;
 use futures_util::StreamExt;
 
-use crate::clients::API_BASE_URL;
+use crate::clients::DEFAULT_API_BASE_URL;
 
 #[async_trait]
 impl MessageClient for AnthropicClient {
@@ -135,7 +135,7 @@ impl MessageClient for AnthropicClient {
             ));
         }
 
-        let url = format!("{}/messages", API_BASE_URL);
+        let url = format!("{}/messages", DEFAULT_API_BASE_URL);
 
         let client = &self.get_client();
         let request = client
