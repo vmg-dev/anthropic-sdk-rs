@@ -8,13 +8,6 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
 
-/// Base URL for the Anthropic API
-pub const DEFAULT_API_BASE_URL: &str = "https://api.anthropic.com/v1";
-
-/// Default API version for the Anthropic API
-///
-/// see https://docs.anthropic.com/en/api/versioning
-pub const DEFAULT_API_VERSION: &str = "2023-06-01";
 
 /// Anthropic API client
 ///
@@ -75,7 +68,7 @@ impl AnthropicClientBuilder {
         Self {
             api_key: api_key.into(),
             api_version: api_version.into(),
-            api_base_url: DEFAULT_API_BASE_URL.to_string(),
+            api_base_url: AnthropicClient::DEFAULT_API_BASE_URL.to_string(),
             client: None,
         }
     }
@@ -130,6 +123,14 @@ impl AnthropicClientBuilder {
 }
 
 impl AnthropicClient {
+    /// Base URL for the Anthropic API
+    pub const DEFAULT_API_BASE_URL: &str = "https://api.anthropic.com/v1";
+
+    /// Default API version for the Anthropic API
+    ///
+    /// see https://docs.anthropic.com/en/api/versioning
+    pub const DEFAULT_API_VERSION: &str = "2023-06-01";
+
     pub fn get_client(&self) -> &ReqwestClient {
         &self.client
     }
