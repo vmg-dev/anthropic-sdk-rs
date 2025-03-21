@@ -12,6 +12,8 @@ use std::error::Error as StdError;
 pub const DEFAULT_API_BASE_URL: &str = "https://api.anthropic.com/v1";
 
 /// Default API version for the Anthropic API
+///
+/// see https://docs.anthropic.com/en/api/versioning
 pub const DEFAULT_API_VERSION: &str = "2023-06-01";
 
 /// Anthropic API client
