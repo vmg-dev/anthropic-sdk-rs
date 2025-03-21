@@ -9,7 +9,7 @@ use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
 
 /// Base URL for the Anthropic API
-pub const API_BASE_URL: &str = "https://api.anthropic.com/v1";
+pub const DEFAULT_API_BASE_URL: &str = "https://api.anthropic.com/v1";
 
 /// Anthropic API client
 ///
@@ -36,6 +36,8 @@ pub struct AnthropicClient {
     client: ReqwestClient,
     /// The API key used for authentication with Anthropic's services
     api_key: String,
+    /// The API version used for authentication with Anthropic's services
+    api_version: String,
 }
 
 impl AnthropicClient {
@@ -127,7 +129,7 @@ impl AnthropicClient {
         B: Serialize + ?Sized,
         E: StdError + From<String>,
     {
-        let url = format!("{}{}", API_BASE_URL, path);
+        let url = format!("{}{}", DEFAULT_API_BASE_URL, path);
 
         let mut request = self
             .client
