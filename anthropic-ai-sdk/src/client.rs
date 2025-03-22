@@ -100,15 +100,15 @@ impl AnthropicClientBuilder {
         let client = if let Some(client) = self.client {
             client
         } else {
-            let api_version_str = self.api_version.clone();
-            let mut headers = header::HeaderMap::new();
-            headers.insert(
-                "anthropic-version",
-                header::HeaderValue::from_str(&api_version_str).map_err(|e| E::from(e.to_string()))?,
-            );
+            // let api_version_str = self.api_version.clone();
+            // let mut headers = header::HeaderMap::new();
+            // headers.insert(
+            //     "anthropic-version",
+            //     header::HeaderValue::from_str(&api_version_str).map_err(|e| E::from(e.to_string()))?,
+            // );
 
             ReqwestClient::builder()
-                .default_headers(headers)
+                // .default_headers(headers)
                 .user_agent(AnthropicClient::DEFAULT_USER_AGENT)
                 .build()
                 .map_err(|e| E::from(e.to_string()))?
@@ -228,7 +228,8 @@ impl AnthropicClient {
         let mut request = self
             .client
             .request(method, &url)
-            .header("x-api-key", &self.api_key);
+            .header("x-api-key", &self.api_key)
+            .header("anthropic-version", &self.api_version);
 
         // Add query parameters if provided
         if let Some(q) = query {
