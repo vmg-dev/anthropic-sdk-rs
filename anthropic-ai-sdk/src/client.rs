@@ -109,6 +109,7 @@ impl AnthropicClientBuilder {
 
             ReqwestClient::builder()
                 .default_headers(headers)
+                .user_agent(AnthropicClient::DEFAULT_USER_AGENT)
                 .build()
                 .map_err(|e| E::from(e.to_string()))?
         };
@@ -130,6 +131,11 @@ impl AnthropicClient {
     ///
     /// see https://docs.anthropic.com/en/api/versioning
     pub const DEFAULT_API_VERSION: &str = "2023-06-01";
+
+    /// Our user agent.
+    pub const DEFAULT_USER_AGENT: &'static str =
+        concat!(env!("CARGO_PKG_NAME"), "-", env!("CARGO_PKG_VERSION"));
+
 
     pub fn get_client(&self) -> &ReqwestClient {
         &self.client
