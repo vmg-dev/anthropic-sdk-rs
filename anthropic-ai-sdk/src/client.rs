@@ -35,7 +35,7 @@ use std::error::Error as StdError;
 /// // Using a custom HTTP client
 /// let reqwest_client = reqwest::Client::builder().build()?;
 /// let client_with_custom_http = AnthropicClient::builder("your-api-key", "2023-06-01")
-///     .with_client(reqwest_client)
+///     .with_http_client(reqwest_client)
 ///     .build::<ModelError>()?;
 /// # Ok(())
 /// # }
@@ -80,7 +80,7 @@ impl AnthropicClientBuilder {
     }
 
     /// Sets a custom HTTP client
-    pub fn with_client(mut self, client: ReqwestClient) -> Self {
+    pub fn with_http_client(mut self, client: ReqwestClient) -> Self {
         self.client = Some(client);
         self
     }
