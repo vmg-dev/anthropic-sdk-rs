@@ -144,7 +144,7 @@ impl MessageClient for AnthropicClient {
             )
             .header(
                 "anthropic-version",
-                HeaderValue::from_str(&self.get_api_version()).unwrap(),
+                HeaderValue::from_str(self.get_api_version()).unwrap(),
             )
             .json(body);
 

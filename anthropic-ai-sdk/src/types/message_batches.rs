@@ -264,7 +264,7 @@ impl ListMessageBatchesParams {
 
     /// Set the limit parameter (1-1000)
     pub fn limit(mut self, limit: u16) -> Self {
-        self.limit = Some(limit.min(1000).max(1));
+        self.limit = Some(limit.clamp(1, 1000));
         self
     }
 }
