@@ -142,6 +142,10 @@ impl MessageClient for AnthropicClient {
                 "x-api-key",
                 HeaderValue::from_str(self.get_api_key()).unwrap(),
             )
+            .header(
+                "anthropic-version",
+                HeaderValue::from_str(&self.get_api_version()).unwrap(),
+            )
             .json(body);
 
         let response = request
