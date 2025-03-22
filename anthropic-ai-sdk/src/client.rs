@@ -3,7 +3,7 @@
 //! This module provides the main client for interacting with the Anthropic API.
 //! It handles authentication, request construction, and response parsing.
 
-use reqwest::{header, Client as ReqwestClient};
+use reqwest::Client as ReqwestClient;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
