@@ -7,7 +7,7 @@ use eventsource_stream::Eventsource;
 use futures_util::Stream;
 use reqwest::header::HeaderValue;
 
-use crate::clients::AnthropicClient;
+use crate::client::AnthropicClient;
 use crate::types::message::{
     CountMessageTokensParams, CountMessageTokensResponse, CreateMessageParams,
     CreateMessageResponse, MessageClient, MessageError, StreamEvent,
@@ -43,7 +43,7 @@ impl MessageClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message::{MessageClient, MessageError};
     /// use anthropic_ai_sdk::types::message::{
     ///     CreateMessageParams, CreateMessageResponse
@@ -93,7 +93,7 @@ impl MessageClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message::{MessageClient, MessageError};
     /// use tokio;
     /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {

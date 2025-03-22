@@ -1,4 +1,4 @@
-use anthropic_ai_sdk::clients::AnthropicClient;
+use anthropic_ai_sdk::client::AnthropicClient;
 use anthropic_ai_sdk::types::model::ModelClient;
 use anthropic_ai_sdk::types::model::ModelError;
 use std::env;

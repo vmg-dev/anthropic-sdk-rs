@@ -17,7 +17,7 @@ use std::error::Error as StdError;
 /// # Examples
 ///
 /// ```no_run
-/// use anthropic_ai_sdk::clients::AnthropicClient;
+/// use anthropic_ai_sdk::client::AnthropicClient;
 /// use anthropic_ai_sdk::types::model::ModelError;
 ///
 /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -168,7 +168,7 @@ impl AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// # use anthropic_ai_sdk::clients::AnthropicClient;
+    /// # use anthropic_ai_sdk::client::AnthropicClient;
     /// # use anthropic_ai_sdk::types::model::ModelError;
     /// let client = AnthropicClient::new::<ModelError>(
     ///     "your-api-key",
