@@ -3,7 +3,7 @@
 //! This module contains the implementations for the Anthropic Message Batches API endpoints.
 //! It provides functionality for creating message batches.
 
-use crate::clients::AnthropicClient;
+use crate::client::AnthropicClient;
 use crate::types::message_batches::{
     CancelMessageBatchParams, CancelResponse, CreateMessageBatchParams, DeleteMessageBatchParams,
     DeleteResponse, ListMessageBatchesParams, ListMessageBatchesResponse, MessageBatch,
@@ -39,7 +39,7 @@ impl MessageBatchClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message_batches::{
     ///     CreateMessageBatchParams, Message, MessageBatchClient, MessageBatchError, MessageRequest,
     ///     MessageRequestParams,
@@ -89,7 +89,7 @@ impl MessageBatchClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError};
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -128,7 +128,7 @@ impl MessageBatchClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError, RetrieveMessageBatchParams};
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -167,7 +167,7 @@ impl MessageBatchClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message_batches::{MessageBatch, MessageBatchClient, MessageBatchError, RetrieveMessageBatchResultsParams};
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -206,7 +206,7 @@ impl MessageBatchClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message_batches::{CancelMessageBatchParams, MessageBatchClient, MessageBatchError};
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -245,7 +245,7 @@ impl MessageBatchClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message_batches::{DeleteMessageBatchParams, MessageBatchClient, MessageBatchError};
     ///
     /// async fn example() -> Result<(), Box<dyn std::error::Error>> {

@@ -1,4 +1,4 @@
-use anthropic_ai_sdk::clients::AnthropicClient;
+use anthropic_ai_sdk::client::AnthropicClient;
 use anthropic_ai_sdk::types::message_batches::{
     CreateMessageBatchParams, Message, MessageBatchClient, MessageBatchError, MessageRequest,
     MessageRequestParams,
