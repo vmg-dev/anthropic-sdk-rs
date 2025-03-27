@@ -3,13 +3,11 @@
 //! This module provides the main client for interacting with the Anthropic API.
 //! It handles authentication, request construction, and response parsing.
 
-use reqwest::{Client as ReqwestClient, header};
+use reqwest::Client as ReqwestClient;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
 
-/// Base URL for the Anthropic API
-pub const API_BASE_URL: &str = "https://api.anthropic.com/v1";
 
 /// Anthropic API client
 ///
@@ -19,14 +17,26 @@ pub const API_BASE_URL: &str = "https://api.anthropic.com/v1";
 /// # Examples
 ///
 /// ```no_run
-/// use anthropic_ai_sdk::clients::AnthropicClient;
+/// use anthropic_ai_sdk::client::AnthropicClient;
 /// use anthropic_ai_sdk::types::model::ModelError;
 ///
 /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+/// // Basic usage
 /// let client = AnthropicClient::new::<ModelError>(
 ///     "your-api-key",
 ///     "2023-06-01",
 /// )?;
+///
+/// // Using the builder pattern
+/// let client_with_custom_url = AnthropicClient::builder("your-api-key", "2023-06-01")
+///     .with_api_base_url("https://custom-anthropic-endpoint.com/v1")
+///     .build::<ModelError>()?;
+///
+/// // Using a custom HTTP client
+/// let reqwest_client = reqwest::Client::builder().build()?;
+/// let client_with_custom_http = AnthropicClient::builder("your-api-key", "2023-06-01")
+///     .with_http_client(reqwest_client)
+///     .build::<ModelError>()?;
 /// # Ok(())
 /// # }
 /// ```
@@ -36,15 +46,116 @@ pub struct AnthropicClient {
     client: ReqwestClient,
     /// The API key used for authentication with Anthropic's services
     api_key: String,
+    /// The API version used for authentication with Anthropic's services
+    api_version: String,
+    /// The base URL for the Anthropic API
+    api_base_url: String,
+}
+
+/// Builder for AnthropicClient
+///
+/// Provides a flexible way to configure and create an AnthropicClient.
+pub struct AnthropicClientBuilder {
+    api_key: String,
+    api_version: String,
+    api_base_url: String,
+    client: Option<ReqwestClient>,
+}
+
+impl AnthropicClientBuilder {
+    /// Creates a new builder with required parameters
+    pub fn new(api_key: impl Into<String>, api_version: impl Into<String>) -> Self {
+        Self {
+            api_key: api_key.into(),
+            api_version: api_version.into(),
+            api_base_url: AnthropicClient::DEFAULT_API_BASE_URL.to_string(),
+            client: None,
+        }
+    }
+
+    /// Sets a custom API base URL
+    pub fn with_api_base_url(mut self, api_base_url: impl Into<String>) -> Self {
+        self.api_base_url = api_base_url.into();
+        self
+    }
+
+    /// Sets a custom HTTP client
+    pub fn with_http_client(mut self, client: ReqwestClient) -> Self {
+        self.client = Some(client);
+        self
+    }
+
+    /// Set the API version
+    pub fn with_api_version(mut self, api_version: impl Into<String>) -> Self {
+        self.api_version = api_version.into();
+        self
+    }
+
+    /// Builds the AnthropicClient with the specified configuration
+    pub fn build<E>(self) -> Result<AnthropicClient, E>
+    where
+        E: StdError + From<String>,
+    {
+        // Use provided client or create a new one
+        let client = if let Some(client) = self.client {
+            client
+        } else {
+            // let api_version_str = self.api_version.clone();
+            // let mut headers = header::HeaderMap::new();
+            // headers.insert(
+            //     "anthropic-version",
+            //     header::HeaderValue::from_str(&api_version_str).map_err(|e| E::from(e.to_string()))?,
+            // );
+
+            ReqwestClient::builder()
+                // .default_headers(headers)
+                .user_agent(AnthropicClient::DEFAULT_USER_AGENT)
+                .build()
+                .map_err(|e| E::from(e.to_string()))?
+        };
+
+        Ok(AnthropicClient {
+            client,
+            api_key: self.api_key,
+            api_version: self.api_version,
+            api_base_url: self.api_base_url,
+        })
+    }
 }
 
 impl AnthropicClient {
+    /// Base URL for the Anthropic API
+    pub const DEFAULT_API_BASE_URL: &str = "https://api.anthropic.com/v1";
+
+    /// Default API version for the Anthropic API
+    ///
+    /// see https://docs.anthropic.com/en/api/versioning
+    pub const DEFAULT_API_VERSION: &str = "2023-06-01";
+
+    /// Our user agent.
+    pub const DEFAULT_USER_AGENT: &'static str =
+        concat!(env!("CARGO_PKG_NAME"), "-", env!("CARGO_PKG_VERSION"));
+
+
     pub fn get_client(&self) -> &ReqwestClient {
         &self.client
     }
 
     pub fn get_api_key(&self) -> &str {
         &self.api_key
+    }
+
+    pub fn get_api_version(&self) -> &str {
+        &self.api_version
+    }
+
+    pub fn get_api_base_url(&self) -> &str {
+        &self.api_base_url
+    }
+
+    /// Creates a new AnthropicClient builder
+    pub fn builder(api_key: impl Into<String>, api_version: impl Into<String>) -> AnthropicClientBuilder {
+        AnthropicClientBuilder::new(api_key, api_version)
     }
 
     /// Creates a new Anthropic API client with the specified credentials
@@ -63,7 +174,7 @@ impl AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// # use anthropic_ai_sdk::clients::AnthropicClient;
+    /// # use anthropic_ai_sdk::client::AnthropicClient;
     /// # use anthropic_ai_sdk::types::model::ModelError;
     /// let client = AnthropicClient::new::<ModelError>(
     ///     "your-api-key",
@@ -74,22 +185,7 @@ impl AnthropicClient {
     where
         E: StdError + From<String>,
     {
-        let api_version_str = api_version.into();
-        let mut headers = header::HeaderMap::new();
-        headers.insert(
-            "anthropic-version",
-            header::HeaderValue::from_str(&api_version_str).map_err(|e| E::from(e.to_string()))?,
-        );
-
-        let client = ReqwestClient::builder()
-            .default_headers(headers)
-            .build()
-            .map_err(|e| E::from(e.to_string()))?;
-
-        Ok(Self {
-            client,
-            api_key: api_key.into(),
-        })
+        Self::builder(api_key, api_version).build()
     }
 
     /// Sends a request to the Anthropic API with the specified parameters
@@ -127,12 +223,13 @@ impl AnthropicClient {
         B: Serialize + ?Sized,
         E: StdError + From<String>,
     {
-        let url = format!("{}{}", API_BASE_URL, path);
+        let url = format!("{}{}", self.api_base_url, path);
 
         let mut request = self
             .client
             .request(method, &url)
-            .header("x-api-key", &self.api_key);
+            .header("x-api-key", &self.api_key)
+            .header("anthropic-version", &self.api_version);
 
         // Add query parameters if provided
         if let Some(q) = query {

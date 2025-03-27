@@ -24,7 +24,7 @@ cargo add anthropic-ai-sdk
 ## Quick Start
 
 ```rust
-use anthropic_ai_sdk::clients::AnthropicClient;
+use anthropic_ai_sdk::client::AnthropicClient;
 use anthropic_ai_sdk::types::message::{
     CreateMessageParams, Message, MessageClient, MessageError, RequiredMessageParams, Role,
 };

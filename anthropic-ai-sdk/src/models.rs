@@ -3,7 +3,7 @@
 //! This module contains the implementations for the Anthropic Models API endpoints.
 //! It provides functionality for listing available models and their capabilities.
 
-use crate::clients::AnthropicClient;
+use crate::client::AnthropicClient;
 use crate::types::model::{ListModelsParams, ListModelsResponse, Model, ModelClient, ModelError};
 use async_trait::async_trait;
 
@@ -33,7 +33,7 @@ impl ModelClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::model::{ModelClient, ModelError};
     /// use tokio;
     ///
@@ -82,7 +82,7 @@ impl ModelClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::model::{ModelClient, ModelError};
     /// use tokio;
     ///

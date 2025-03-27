@@ -7,15 +7,13 @@ use eventsource_stream::Eventsource;
 use futures_util::Stream;
 use reqwest::header::HeaderValue;
 
-use crate::clients::AnthropicClient;
+use crate::client::AnthropicClient;
 use crate::types::message::{
     CountMessageTokensParams, CountMessageTokensResponse, CreateMessageParams,
     CreateMessageResponse, MessageClient, MessageError, StreamEvent,
 };
 use async_trait::async_trait;
 use futures_util::StreamExt;
-
-use crate::clients::API_BASE_URL;
 
 #[async_trait]
 impl MessageClient for AnthropicClient {
@@ -45,7 +43,7 @@ impl MessageClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message::{MessageClient, MessageError};
     /// use anthropic_ai_sdk::types::message::{
     ///     CreateMessageParams, CreateMessageResponse
@@ -95,7 +93,7 @@ impl MessageClient for AnthropicClient {
     /// # Examples
     ///
     /// ```no_run
-    /// use anthropic_ai_sdk::clients::AnthropicClient;
+    /// use anthropic_ai_sdk::client::AnthropicClient;
     /// use anthropic_ai_sdk::types::message::{MessageClient, MessageError};
     /// use tokio;
     /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
@@ -135,7 +133,7 @@ impl MessageClient for AnthropicClient {
             ));
         }
 
-        let url = format!("{}/messages", API_BASE_URL);
+        let url = format!("{}/messages", AnthropicClient::DEFAULT_API_BASE_URL);
 
         let client = &self.get_client();
         let request = client
@@ -143,6 +141,10 @@ impl MessageClient for AnthropicClient {
             .header(
                 "x-api-key",
                 HeaderValue::from_str(self.get_api_key()).unwrap(),
+            )
+            .header(
+                "anthropic-version",
+                HeaderValue::from_str(self.get_api_version()).unwrap(),
             )
             .json(body);
 
