@@ -1,41 +1,26 @@
 use anthropic_ai_sdk::client::AnthropicClient;
-use anthropic_ai_sdk::types::message_batches::{
-    CancelMessageBatchParams, MessageBatchClient, MessageBatchError,
-};
+use anthropic_ai_sdk::types::admin::{AdminClient, AdminError, ApiKeyStatus, ListApiKeysParams};
 use std::env;
-use tracing::{error, info};
 
 #[tokio::main]
-async fn main() {
-    tracing_subscriber::fmt()
-        .with_ansi(true)
-        .with_target(true)
-        .with_thread_ids(true)
-        .with_line_number(true)
-        .with_file(false)
-        .with_level(true)
-        .try_init()
-        .expect("Failed to initialize logger");
-
-    let api_key = env::var("ANTHROPIC_API_KEY").expect("ANTHROPIC_API_KEY is not set");
+async fn main() -> Result<(), AdminError> {
+    let admin_api_key = env::var("ANTHROPIC_ADMIN_KEY").expect("ANTHROPIC_ADMIN_KEY is not set");
     let api_version = env::var("ANTHROPIC_API_VERSION").unwrap_or("2023-06-01".to_string());
 
-    let client = AnthropicClient::new::<MessageBatchError>(api_key, api_version).unwrap();
+    let client = AnthropicClient::new_admin::<AdminError>(admin_api_key, api_version)?;
 
-    match client
-        .cancel_message_batch(&CancelMessageBatchParams::new(
-            "msgbatch_batch_id",
-        ))
-        .await
-    {
-        Ok(results) => {
-            info!(
-                "Successfully retrieved message batch results: {:?}",
-                results
-            );
-        }
-        Err(e) => {
-            error!("Error: {}", e);
-        }
+    // List all active API keys
+    let params = ListApiKeysParams::new()
+        .limit(10)
+        .status(ApiKeyStatus::Active);
+
+    let api_keys = client.list_api_keys(Some(&params)).await?;
+    for api_key in api_keys.data {
+        println!(
+            "API Key: {} ({}) - Created by: {} - Hint: {}",
+            api_key.name, api_key.id, api_key.created_by.id, api_key.partial_key_hint
+        );
     }
+
+    Ok(())
 }
