@@ -123,6 +123,16 @@ pub struct ListApiKeysResponse {
     pub last_id: Option<String>,
 }
 
+/// User information
+#[derive(Debug, Deserialize)]
+pub struct User {
+    /// Unique identifier for the user
+    pub id: String,
+    /// Type of the resource (always "user")
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
 /// Represents an API key
 #[derive(Debug, Deserialize)]
 pub struct ApiKey {
@@ -138,11 +148,11 @@ pub struct ApiKey {
     /// Creation timestamp
     #[serde(with = "rfc3339")]
     pub created_at: OffsetDateTime,
-    /// Last modified timestamp
-    #[serde(with = "rfc3339")]
-    pub modified_at: OffsetDateTime,
-    /// ID of the user who created the API key
-    pub created_by_user_id: String,
+    /// Information about the user who created the API key
+    pub created_by: User,
     /// ID of the workspace this API key belongs to
-    pub workspace_id: String,
+    #[serde(default)]
+    pub workspace_id: Option<String>,
+    /// Partial key hint for display purposes
+    pub partial_key_hint: String,
 }
