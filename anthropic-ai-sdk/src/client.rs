@@ -8,7 +8,6 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::error::Error as StdError;
 
-
 /// Anthropic API client
 ///
 /// The main client for making requests to the Anthropic API.
@@ -100,15 +99,7 @@ impl AnthropicClientBuilder {
         let client = if let Some(client) = self.client {
             client
         } else {
-            // let api_version_str = self.api_version.clone();
-            // let mut headers = header::HeaderMap::new();
-            // headers.insert(
-            //     "anthropic-version",
-            //     header::HeaderValue::from_str(&api_version_str).map_err(|e| E::from(e.to_string()))?,
-            // );
-
             ReqwestClient::builder()
-                // .default_headers(headers)
                 .user_agent(AnthropicClient::DEFAULT_USER_AGENT)
                 .build()
                 .map_err(|e| E::from(e.to_string()))?
@@ -136,7 +127,6 @@ impl AnthropicClient {
     pub const DEFAULT_USER_AGENT: &'static str =
         concat!(env!("CARGO_PKG_NAME"), "-", env!("CARGO_PKG_VERSION"));
 
-
     pub fn get_client(&self) -> &ReqwestClient {
         &self.client
     }
@@ -154,7 +144,10 @@ impl AnthropicClient {
     }
 
     /// Creates a new AnthropicClient builder
-    pub fn builder(api_key: impl Into<String>, api_version: impl Into<String>) -> AnthropicClientBuilder {
+    pub fn builder(
+        api_key: impl Into<String>,
+        api_version: impl Into<String>,
+    ) -> AnthropicClientBuilder {
         AnthropicClientBuilder::new(api_key, api_version)
     }
 
