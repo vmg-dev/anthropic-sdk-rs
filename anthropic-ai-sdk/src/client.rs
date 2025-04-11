@@ -181,6 +181,39 @@ impl AnthropicClient {
         Self::builder(api_key, api_version).build()
     }
 
+    /// Creates a new Anthropic Admin API client with the specified credentials
+    ///
+    /// # Arguments
+    ///
+    /// * `admin_api_key` - Your Anthropic Admin API key for authentication
+    /// * `api_version` - The API version to use (e.g., "2023-06-01")
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// - The API version header cannot be created
+    /// - The HTTP client cannot be initialized
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use anthropic_ai_sdk::client::AnthropicClient;
+    /// # use anthropic_ai_sdk::types::admin::AdminError;
+    /// let client = AnthropicClient::new_admin::<AdminError>(
+    ///     "your-admin-api-key",
+    ///     "2023-06-01",
+    /// ).unwrap();
+    /// ```
+    pub fn new_admin<E>(
+        admin_api_key: impl Into<String>,
+        api_version: impl Into<String>,
+    ) -> Result<Self, E>
+    where
+        E: StdError + From<String>,
+    {
+        Self::builder(admin_api_key, api_version).build()
+    }
+
     /// Sends a request to the Anthropic API with the specified parameters
     ///
     /// # Type Parameters

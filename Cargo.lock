@@ -701,6 +701,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fe7db12097d22ec582439daf8618b8fdd1a7bef6270e9af3b1ebcd30893cf413"
 
 [[package]]
+name = "list-api-keys"
+version = "0.1.0"
+dependencies = [
+ "anthropic-ai-sdk",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "list-message-batches"
 version = "0.1.0"
 dependencies = [
