@@ -5,7 +5,7 @@
 
 use crate::client::AnthropicClient;
 use crate::types::admin::api_keys::{
-    AdminClient, AdminError, ListApiKeysParams, ListApiKeysResponse,
+    AdminClient, AdminError, ApiKey, ListApiKeysParams, ListApiKeysResponse,
 };
 use async_trait::async_trait;
 
@@ -58,5 +58,56 @@ impl AdminClient for AnthropicClient {
         params: Option<&'a ListApiKeysParams>,
     ) -> Result<ListApiKeysResponse, AdminError> {
         self.get("/organizations/api_keys", params).await
+    }
+
+    /// Gets a specific API key
+    ///
+    /// Retrieves details for a specific API key by its ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `api_key_id` - The ID of the API key to retrieve
+    ///
+    /// # Returns
+    ///
+    /// Returns the API key details on success.
+    ///
+    /// # Errors
+    ///
+    /// Returns an `AdminError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    /// - The API key is not found
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::client::AnthropicClient;
+    /// use anthropic_ai_sdk::types::admin::{AdminClient, AdminError};
+    /// use tokio;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), AdminError> {
+    ///     let client = AnthropicClient::new::<AdminError>(
+    ///         "your-admin-api-key",
+    ///         "2023-06-01",
+    ///     )?;
+    ///
+    ///     // Get a specific API key
+    ///     let api_key = client.get_api_key("api_key_xyz").await?;
+    ///     println!("API Key: {} ({})", api_key.name, api_key.id);
+    ///     println!("Status: {:?}", api_key.status);
+    ///     println!("Partial Hint: {}", api_key.partial_key_hint);
+    ///
+    ///     Ok(())
+    /// }
+    /// ```
+    async fn get_api_key<'a>(
+        &'a self,
+        api_key_id: &'a str,
+    ) -> Result<ApiKey, AdminError> {
+        self.get(&format!("/organizations/api_keys/{}", api_key_id), Option::<&()>::None)
+            .await
     }
 }
