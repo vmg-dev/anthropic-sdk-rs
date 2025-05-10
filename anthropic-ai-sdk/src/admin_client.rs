@@ -5,7 +5,8 @@
 
 use crate::client::AnthropicClient;
 use crate::types::admin::api_keys::{
-    AdminClient, AdminError, ApiKey, ListApiKeysParams, ListApiKeysResponse, UpdateApiKeyParams,
+    AdminClient, AdminError, AdminUpdateApiKeyParams, ApiKey, ListApiKeysParams,
+    ListApiKeysResponse,
 };
 use async_trait::async_trait;
 
@@ -103,12 +104,12 @@ impl AdminClient for AnthropicClient {
     ///     Ok(())
     /// }
     /// ```
-    async fn get_api_key<'a>(
-        &'a self,
-        api_key_id: &'a str,
-    ) -> Result<ApiKey, AdminError> {
-        self.get(&format!("/organizations/api_keys/{}", api_key_id), Option::<&()>::None)
-            .await
+    async fn get_api_key<'a>(&'a self, api_key_id: &'a str) -> Result<ApiKey, AdminError> {
+        self.get(
+            &format!("/organizations/api_keys/{}", api_key_id),
+            Option::<&()>::None,
+        )
+        .await
     }
 
     /// Updates an API key
@@ -162,9 +163,12 @@ impl AdminClient for AnthropicClient {
     async fn update_api_key<'a>(
         &'a self,
         api_key_id: &'a str,
-        params: &'a UpdateApiKeyParams,
+        params: &'a AdminUpdateApiKeyParams,
     ) -> Result<ApiKey, AdminError> {
-        self.post(&format!("/organizations/api_keys/{}", api_key_id), Some(params))
-            .await
+        self.post(
+            &format!("/organizations/api_keys/{}", api_key_id),
+            Some(params),
+        )
+        .await
     }
 }
