@@ -38,6 +38,12 @@ pub trait AdminClient {
         &'a self,
         api_key_id: &'a str,
     ) -> Result<ApiKey, AdminError>;
+
+    async fn update_api_key<'a>(
+        &'a self,
+        api_key_id: &'a str,
+        params: &'a UpdateApiKeyParams,
+    ) -> Result<ApiKey, AdminError>;
 }
 
 /// Parameters for listing API keys
@@ -160,4 +166,37 @@ pub struct ApiKey {
     pub workspace_id: Option<String>,
     /// Partial key hint for display purposes
     pub partial_key_hint: String,
+}
+
+/// Parameters for updating an API key
+#[derive(Debug, Serialize)]
+pub struct UpdateApiKeyParams {
+    /// Name of the API key
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Status of the API key
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<ApiKeyStatus>,
+}
+
+impl UpdateApiKeyParams {
+    /// Create a new UpdateApiKeyParams with default values
+    pub fn new() -> Self {
+        Self {
+            name: None,
+            status: None,
+        }
+    }
+
+    /// Set the name of the API key
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = Some(name.into());
+        self
+    }
+
+    /// Set the status of the API key
+    pub fn status(mut self, status: ApiKeyStatus) -> Self {
+        self.status = Some(status);
+        self
+    }
 }
