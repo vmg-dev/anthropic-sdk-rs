@@ -34,15 +34,12 @@ pub trait AdminClient {
         params: Option<&'a ListApiKeysParams>,
     ) -> Result<ListApiKeysResponse, AdminError>;
 
-    async fn get_api_key<'a>(
-        &'a self,
-        api_key_id: &'a str,
-    ) -> Result<ApiKey, AdminError>;
+    async fn get_api_key<'a>(&'a self, api_key_id: &'a str) -> Result<ApiKey, AdminError>;
 
     async fn update_api_key<'a>(
         &'a self,
         api_key_id: &'a str,
-        params: &'a UpdateApiKeyParams,
+        params: &'a AdminUpdateApiKeyParams,
     ) -> Result<ApiKey, AdminError>;
 }
 
@@ -170,7 +167,7 @@ pub struct ApiKey {
 
 /// Parameters for updating an API key
 #[derive(Debug, Serialize)]
-pub struct UpdateApiKeyParams {
+pub struct AdminUpdateApiKeyParams {
     /// Name of the API key
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -179,7 +176,7 @@ pub struct UpdateApiKeyParams {
     pub status: Option<ApiKeyStatus>,
 }
 
-impl UpdateApiKeyParams {
+impl AdminUpdateApiKeyParams {
     /// Create a new UpdateApiKeyParams with default values
     pub fn new() -> Self {
         Self {

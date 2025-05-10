@@ -1,6 +1,6 @@
 use anthropic_ai_sdk::client::AnthropicClient;
 use anthropic_ai_sdk::types::admin::api_keys::{
-    AdminClient, AdminError, ApiKeyStatus, UpdateApiKeyParams,
+    AdminClient, AdminError, AdminUpdateApiKeyParams, ApiKeyStatus,
 };
 use std::env;
 use tracing::{error, info};
@@ -41,7 +41,7 @@ async fn main() -> Result<(), AdminError> {
     });
 
     // Build update parameters
-    let mut params = UpdateApiKeyParams::new();
+    let mut params = AdminUpdateApiKeyParams::new();
     if let Some(name) = new_name {
         params = params.name(name);
     }
@@ -56,8 +56,7 @@ async fn main() -> Result<(), AdminError> {
         return Ok(());
     }
 
-    // Call the trait method explicitly
-    match (&client as &dyn AdminClient).update_api_key(api_key_id, &params).await {
+    match AdminClient::update_api_key(&client, api_key_id, &params).await {
         Ok(api_key) => {
             info!("Successfully updated API key!");
             info!("  ID: {}", api_key.id);
