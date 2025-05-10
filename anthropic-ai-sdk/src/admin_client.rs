@@ -5,7 +5,7 @@
 
 use crate::client::AnthropicClient;
 use crate::types::admin::api_keys::{
-    AdminClient, AdminError, ApiKey, ListApiKeysParams, ListApiKeysResponse,
+    AdminClient, AdminError, ApiKey, ListApiKeysParams, ListApiKeysResponse, UpdateApiKeyParams,
 };
 use async_trait::async_trait;
 
@@ -108,6 +108,63 @@ impl AdminClient for AnthropicClient {
         api_key_id: &'a str,
     ) -> Result<ApiKey, AdminError> {
         self.get(&format!("/organizations/api_keys/{}", api_key_id), Option::<&()>::None)
+            .await
+    }
+
+    /// Updates an API key
+    ///
+    /// Updates properties of an API key by its ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `api_key_id` - The ID of the API key to update
+    /// * `params` - Parameters for updating the API key
+    ///
+    /// # Returns
+    ///
+    /// Returns the updated API key details on success.
+    ///
+    /// # Errors
+    ///
+    /// Returns an `AdminError` if:
+    /// - The request fails to send
+    /// - The API returns an error response
+    /// - The response cannot be parsed
+    /// - The API key is not found
+    /// - Invalid parameters are provided
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use anthropic_ai_sdk::client::AnthropicClient;
+    /// use anthropic_ai_sdk::types::admin::api_keys::{AdminClient, AdminError, ApiKeyStatus, UpdateApiKeyParams};
+    /// use tokio;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), AdminError> {
+    ///     let client = AnthropicClient::new::<AdminError>(
+    ///         "your-admin-api-key",
+    ///         "2023-06-01",
+    ///     )?;
+    ///
+    ///     // Update an API key
+    ///     let params = UpdateApiKeyParams::new()
+    ///         .name("Updated API Key")
+    ///         .status(ApiKeyStatus::Inactive);
+    ///
+    ///     let api_key = client.update_api_key("api_key_xyz", &params).await?;
+    ///     println!("Updated API Key: {} ({})", api_key.name, api_key.id);
+    ///     println!("New Status: {:?}", api_key.status);
+    ///
+    ///     Ok(())
+    /// }
+    /// ```
+    async fn update_api_key<'a>(
+        &'a self,
+        api_key_id: &'a str,
+        params: &'a UpdateApiKeyParams,
+    ) -> Result<ApiKey, AdminError> {
+        self.post(&format!("/organizations/api_keys/{}", api_key_id), Some(params))
             .await
     }
 }
