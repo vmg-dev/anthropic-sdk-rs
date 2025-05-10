@@ -28,43 +28,27 @@ async fn main() -> Result<(), AdminError> {
         .get(1)
         .expect("Please provide an API key ID as argument");
 
-    // Parse optional new name and status from command line arguments
-    let new_name = if args.get(2).map(|s| s.as_str()) == Some("") || args.get(2).map(|s| s.starts_with("active") || s.starts_with("inactive") || s.starts_with("archived")).unwrap_or(false) {
-        // If arg 2 is empty string or looks like a status, it's not a name
-        None
-    } else {
-        args.get(2)
-    };
-    
-    let new_status = args.get(3).or_else(|| {
-        // Check if arg 2 is a status
-        args.get(2).filter(|s| s.starts_with("active") || s.starts_with("inactive") || s.starts_with("archived"))
-    }).and_then(|s| match s.as_str() {
+    // Parse optional status from command line arguments
+    let new_status = args.get(2).and_then(|s| match s.as_str() {
         "active" => Some(ApiKeyStatus::Active),
         "inactive" => Some(ApiKeyStatus::Inactive),
         "archived" => Some(ApiKeyStatus::Archived),
         _ => {
-            info!("Invalid status. Valid options: active, inactive, archived");
+            error!("Invalid status. Valid options: active, inactive, archived");
             None
         }
     });
 
-    // Build update parameters
-    let mut params = AdminUpdateApiKeyParams::new();
-    if let Some(name) = new_name {
-        params = params.name(name);
-    }
-    if let Some(status) = new_status {
-        params = params.status(status);
-    }
-
-    // Check if at least one parameter is set
-    if params.name.is_none() && params.status.is_none() {
-        error!("Please provide at least one parameter to update: name and/or status");
-        error!("Usage: cargo run -- <api_key_id> [--name <new_name>] [--status <new_status>]");
-        error!("Or: cargo run -- <api_key_id> <new_status> (for status only)");
+    // Check if status is provided
+    if new_status.is_none() {
+        error!("Please provide a status to update");
+        error!("Usage: cargo run -- <api_key_id> <status>");
+        error!("Valid status options: active, inactive, archived");
         return Ok(());
     }
+
+    // Build update parameters - only status
+    let params = AdminUpdateApiKeyParams::new().status(new_status.unwrap());
 
     match AdminClient::update_api_key(&client, api_key_id, &params).await {
         Ok(api_key) => {
