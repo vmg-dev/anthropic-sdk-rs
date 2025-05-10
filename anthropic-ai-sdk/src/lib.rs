@@ -1,4 +1,4 @@
-pub mod admin;
+pub mod admin_client;
 pub mod client;
 pub mod message_batches;
 pub mod messages;

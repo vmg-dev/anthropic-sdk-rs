@@ -4,7 +4,9 @@
 //! It provides functionality for managing API keys and other administrative tasks.
 
 use crate::client::AnthropicClient;
-use crate::types::admin::{AdminClient, AdminError, ListApiKeysParams, ListApiKeysResponse};
+use crate::types::admin::api_keys::{
+    AdminClient, AdminError, ListApiKeysParams, ListApiKeysResponse,
+};
 use async_trait::async_trait;
 
 #[async_trait]
