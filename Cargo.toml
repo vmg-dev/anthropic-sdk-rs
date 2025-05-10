@@ -13,6 +13,7 @@ members = [
     "examples/message-batches/cancel-a-message-batch",
     "examples/message-batches/delete-a-message-batch",
     "examples/admin/api-keys/list-api-keys",
+    "examples/admin/api-keys/get-api-key",
     ]
 default-members = ["anthropic-ai-sdk"]
 resolver = "2"
