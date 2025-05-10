@@ -11,16 +11,22 @@ async fn main() -> Result<(), AdminError> {
 
     // Get the API key ID from command line arguments
     let args: Vec<String> = env::args().collect();
-    let api_key_id = args.get(1).expect("Please provide an API key ID as argument");
+    let api_key_id = args
+        .get(1)
+        .expect("Please provide an API key ID as argument");
 
-    let api_key = client.get_api_key(api_key_id).await?;
+    // Use the AdminClient trait explicitly to call get_api_key
+    let api_key = AdminClient::get_api_key(&client, api_key_id).await?;
     println!("API Key Details:");
     println!("  ID: {}", api_key.id);
     println!("  Name: {}", api_key.name);
     println!("  Status: {:?}", api_key.status);
     println!("  Partial Key Hint: {}", api_key.partial_key_hint);
     println!("  Created At: {}", api_key.created_at);
-    println!("  Created By: {} (ID: {})", api_key.created_by.type_, api_key.created_by.id);
+    println!(
+        "  Created By: {} (ID: {})",
+        api_key.created_by.type_, api_key.created_by.id
+    );
     if let Some(workspace_id) = api_key.workspace_id {
         println!("  Workspace ID: {}", workspace_id);
     } else {
