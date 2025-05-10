@@ -29,8 +29,17 @@ async fn main() -> Result<(), AdminError> {
         .expect("Please provide an API key ID as argument");
 
     // Parse optional new name and status from command line arguments
-    let new_name = args.get(2);
-    let new_status = args.get(3).and_then(|s| match s.as_str() {
+    let new_name = if args.get(2).map(|s| s.as_str()) == Some("") || args.get(2).map(|s| s.starts_with("active") || s.starts_with("inactive") || s.starts_with("archived")).unwrap_or(false) {
+        // If arg 2 is empty string or looks like a status, it's not a name
+        None
+    } else {
+        args.get(2)
+    };
+    
+    let new_status = args.get(3).or_else(|| {
+        // Check if arg 2 is a status
+        args.get(2).filter(|s| s.starts_with("active") || s.starts_with("inactive") || s.starts_with("archived"))
+    }).and_then(|s| match s.as_str() {
         "active" => Some(ApiKeyStatus::Active),
         "inactive" => Some(ApiKeyStatus::Inactive),
         "archived" => Some(ApiKeyStatus::Archived),
@@ -52,7 +61,8 @@ async fn main() -> Result<(), AdminError> {
     // Check if at least one parameter is set
     if params.name.is_none() && params.status.is_none() {
         error!("Please provide at least one parameter to update: name and/or status");
-        error!("Usage: cargo run -- <api_key_id> [new_name] [new_status]");
+        error!("Usage: cargo run -- <api_key_id> [--name <new_name>] [--status <new_status>]");
+        error!("Or: cargo run -- <api_key_id> <new_status> (for status only)");
         return Ok(());
     }
 
