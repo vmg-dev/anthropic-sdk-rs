@@ -56,7 +56,8 @@ async fn main() -> Result<(), AdminError> {
         return Ok(());
     }
 
-    match AdminClient::update_api_key(&client, api_key_id, &params).await {
+    // Call the trait method explicitly
+    match (&client as &dyn AdminClient).update_api_key(api_key_id, &params).await {
         Ok(api_key) => {
             info!("Successfully updated API key!");
             info!("  ID: {}", api_key.id);
