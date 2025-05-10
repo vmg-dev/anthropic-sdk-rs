@@ -1,5 +1,7 @@
 use anthropic_ai_sdk::client::AnthropicClient;
-use anthropic_ai_sdk::types::admin::{AdminClient, AdminError, ApiKeyStatus, ListApiKeysParams};
+use anthropic_ai_sdk::types::admin::api_keys::{
+    AdminClient, AdminError, ApiKeyStatus, ListApiKeysParams,
+};
 use std::env;
 
 #[tokio::main]
