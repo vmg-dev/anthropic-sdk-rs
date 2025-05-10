@@ -133,7 +133,7 @@ Check out the [examples](https://github.com/e-bebe/anthropic-sdk-rs/tree/main/ex
   - API Keys
     - [x] Get API Key
     - [x] List API Keys
-    - [ ] Update API Keys
+    - [x] Update API Keys
 
 ## Development
 
