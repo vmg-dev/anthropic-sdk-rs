@@ -206,6 +206,12 @@ pub enum ContentBlock {
         tool_use_id: String,
         content: String,
     },
+    /// Thinking content
+    #[serde(rename = "thinking")]
+    Thinking { thinking: String, signature: String },
+    /// Redacted thinking
+    #[serde(rename = "redacted_thinking")]
+    RedactedThinking { data: String },
 }
 
 /// Source of an image
